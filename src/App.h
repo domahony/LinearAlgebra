@@ -24,13 +24,13 @@ public:
 	}
 
 protected:
-    virtual bool resize(const SDL_ResizeEvent &);
-    virtual bool expose(const SDL_ExposeEvent &);
-    virtual bool activate(const SDL_ActiveEvent &);
-    virtual bool key(const SDL_KeyboardEvent &);
-    virtual bool motion(const SDL_MouseMotionEvent &);
-    virtual bool button(const SDL_MouseButtonEvent &);
-    virtual bool quit(const SDL_QuitEvent &);
+	virtual bool resize(const SDL_ResizeEvent &);
+	virtual bool expose(const SDL_ExposeEvent &);
+	virtual bool activate(const SDL_ActiveEvent &);
+	virtual bool key(const SDL_KeyboardEvent &);
+	virtual bool motion(const SDL_MouseMotionEvent &);
+	virtual bool button(const SDL_MouseButtonEvent &);
+	virtual bool quit(const SDL_QuitEvent &);
 
 	virtual int _init() = 0;
 	virtual int _display() = 0;
