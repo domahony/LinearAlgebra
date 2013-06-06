@@ -61,7 +61,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_prog_OBJECTS = main.$(OBJEXT) App.$(OBJEXT)
+am_prog_OBJECTS = main.$(OBJEXT) App.$(OBJEXT) Test.$(OBJEXT)
 prog_OBJECTS = $(am_prog_OBJECTS)
 am__DEPENDENCIES_1 =
 prog_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -175,7 +175,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CXXFLAGS = $(SDL_CFLAGS)
-prog_SOURCES = main.cc App.cc
+prog_SOURCES = main.cc App.cc Test.cc
 prog_LDADD = $(SDL_LDFLAGS)
 all: all-am
 
@@ -262,6 +262,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/App.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .cc.o:

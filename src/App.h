@@ -13,13 +13,10 @@ namespace sdl {
 
 class App {
 public:
-	App();
+	App(const int&width=640, const int&height=480);
 
 	void start();
-
-	int init() {
-		return _init();
-	}
+	int init();
 
 	bool display() {
 		_display();
@@ -43,6 +40,8 @@ protected:
 private:
 	int done;
 	const int initialized;
+	int width;
+	int height;
 };
 
 } /* namespace sdl */

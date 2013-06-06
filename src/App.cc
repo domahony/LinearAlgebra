@@ -12,9 +12,17 @@ namespace domahony {
 namespace sdl {
 
 App::
-App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false)
+App(const int&width, const int& height) : initialized(SDL_Init(SDL_INIT_EVERYTHING)),
+	done(false), width(width), height(height)
 {
 
+}
+
+int App::
+init()
+{
+	SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
+	return _init();
 }
 
 void App::
@@ -105,7 +113,8 @@ button(const SDL_MouseButtonEvent &)
 bool App::
 quit(const SDL_QuitEvent &)
 {
-	return false;
+	done = true;
+	return true;
 }
 
 
