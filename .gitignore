@@ -13,7 +13,7 @@ Makefile.in
 /missing
 *.swp
 /Makefile
-/.deps/
+src/.deps/
 
 # Compiled Object files
 *.slo
