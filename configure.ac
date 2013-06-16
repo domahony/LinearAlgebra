@@ -18,4 +18,7 @@ else
 	AC_SUBST(SDL_LDFLAGS, `sdl-config --libs`)
 fi
 
+AC_SUBST(GL_CFLAGS, "-I/usr/include/GL")
+AC_SUBST(GL_LDFLAGS, "-lGL")
+
 AC_OUTPUT(Makefile src/Makefile)

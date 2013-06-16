@@ -16,12 +16,16 @@ namespace test {
 
 class Test: public domahony::sdl::App {
 public:
-	Test();
+	Test(const int& width=640, const int& height=480);
 	virtual ~Test();
 
 protected:
 	int _init();
 	int _display();
+
+private:
+	int width;
+	int height;
 
 };
 

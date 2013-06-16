@@ -1,5 +1,5 @@
 bin_PROGRAMS = prog
-AM_CXXFLAGS = $(SDL_CFLAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) $(GL_CFLAGS)
 
-prog_SOURCES = main.cc App.cc Test.cc
-prog_LDADD = $(SDL_LDFLAGS)
+prog_SOURCES = main.cc App.cc Test.cc OpenGL.cc Shader.cc Program.cc Triangles.cc VBO.cc
+prog_LDADD = $(SDL_LDFLAGS) $(GL_LDFLAGS)

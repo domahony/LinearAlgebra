@@ -12,8 +12,7 @@ namespace domahony {
 namespace sdl {
 
 App::
-App(const int&width, const int& height) : initialized(SDL_Init(SDL_INIT_EVERYTHING)),
-	done(false), width(width), height(height)
+App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false)
 {
 
 }
@@ -21,7 +20,7 @@ App(const int&width, const int& height) : initialized(SDL_Init(SDL_INIT_EVERYTHI
 int App::
 init()
 {
-	SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
+
 	return _init();
 }
 
@@ -77,7 +76,7 @@ start()
 bool App::
 resize(const SDL_ResizeEvent &)
 {
-	return false;
+	display();
 }
 
 bool App::

@@ -8,19 +8,20 @@
 #ifndef APP_H_
 #define APP_H_
 
+#include <SDL.h>
+
 namespace domahony {
 namespace sdl {
 
 class App {
 public:
-	App(const int&width=640, const int&height=480);
+	App();
 
 	void start();
 	int init();
 
 	bool display() {
 		_display();
-		SDL_GL_SwapBuffers();
 	}
 
 protected:
@@ -40,8 +41,6 @@ protected:
 private:
 	int done;
 	const int initialized;
-	int width;
-	int height;
 };
 
 } /* namespace sdl */

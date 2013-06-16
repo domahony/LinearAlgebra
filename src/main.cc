@@ -1,12 +1,12 @@
 #include <SDL.h>
 #include "App.h"
-#include "Test.h"
+#include "Triangles.h"
 
 int
 main(int argc, char **argv)
 {
-	domahony::test::Test t;
-	domahony::sdl::App &app = t;
-	app.start();
+	domahony::opengl::Triangles t(640,480);
+	domahony::sdl::App& a = t;
 
+	a.start();
 }
