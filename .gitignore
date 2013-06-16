@@ -14,6 +14,8 @@ Makefile.in
 *.swp
 /Makefile
 src/.deps/
+config.log
+config.status
 
 # Compiled Object files
 *.slo
