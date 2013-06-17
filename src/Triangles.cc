@@ -5,10 +5,11 @@
  *      Author: domahony
  */
 
+#include "Triangles.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <vector>
 #include <SDL.h>
-#include "Triangles.h"
 #include "OpenGL.h"
 
 namespace domahony {
@@ -26,7 +27,15 @@ init_vao()
 
 Triangles::Triangles(const int&width, const int&height) :
 			surface(SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)),
-			vao(init_vao()), program(), vbo1(), vbo2(), width(width), height(height) {
+			vao(init_vao()), program(), vbo1(), vbo2(), width(width), height(height),
+	projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
+	view(glm::lookAt(
+		glm::vec3(-1,3,.5),
+		glm::vec3(0,0,0),
+		glm::vec3(0,1,0)
+	)),
+	model(glm::mat4(1.0f))
+{
 
 }
 
@@ -69,6 +78,8 @@ Triangles::_init()
 
 	program.link();
 
+	mvp = glGetUniformLocation(program, "MVP");
+
 	glViewport(0, 0, width, height);
 
 }
@@ -76,10 +87,14 @@ Triangles::_init()
 int
 Triangles::_display()
 {
+
+	glm::mat4 MVP = projection * view * model;
+
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(program);
+	glUniformMatrix4fv(mvp, 1, GL_FALSE, &MVP[0][0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo1);
 	glEnableVertexAttribArray(0);
