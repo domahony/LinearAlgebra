@@ -13,7 +13,6 @@ Makefile.in
 /missing
 *.swp
 Makefile
-src/.deps/
 config.log
 config.status
 
