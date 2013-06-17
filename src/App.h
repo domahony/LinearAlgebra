@@ -9,6 +9,7 @@
 #define APP_H_
 
 #include <SDL.h>
+#include <Camera.h>
 
 namespace domahony {
 namespace sdl {
@@ -21,7 +22,7 @@ public:
 	int init();
 
 	bool display() {
-		_display();
+		return _display(camera);
 	}
 
 protected:
@@ -34,11 +35,12 @@ protected:
 	virtual bool quit(const SDL_QuitEvent &);
 
 	virtual int _init() = 0;
-	virtual int _display() = 0;
+	virtual int _display(const domahony::framework::Camera&) = 0;
 
 	virtual ~App() {}
 
 private:
+	domahony::framework::Camera camera;
 	int done;
 	const int initialized;
 };

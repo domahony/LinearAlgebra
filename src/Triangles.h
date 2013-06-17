@@ -11,10 +11,13 @@
 #include "App.h"
 #include "Program.h"
 #include "VBO.h"
+#include "Camera.h"
 #include <glm/glm.hpp>
 
 namespace domahony {
 namespace opengl {
+
+using domahony::framework::Camera;
 
 class Triangles: public domahony::sdl::App {
 public:
@@ -23,7 +26,7 @@ public:
 	virtual ~Triangles();
 protected:
 	int _init();
-	int _display();
+	int _display(const Camera&);
 
 private:
 	SDL_Surface *surface;
@@ -34,8 +37,6 @@ private:
 	int width;
 	int height;
 
-	glm::mat4 projection;
-	glm::mat4 view;
 	glm::mat4 model;
 
 	GLuint mvp;

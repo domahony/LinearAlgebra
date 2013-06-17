@@ -6,14 +6,16 @@
  */
 
 #include "Triangles.h"
-#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <vector>
 #include <SDL.h>
 #include "OpenGL.h"
+#include "Camera.h"
 
 namespace domahony {
 namespace opengl {
+
+using domahony::framework::Camera;
 
 static GLuint
 init_vao()
@@ -28,13 +30,7 @@ init_vao()
 Triangles::Triangles(const int&width, const int&height) :
 			surface(SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)),
 			vao(init_vao()), program(), vbo1(), vbo2(), width(width), height(height),
-	projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
-	view(glm::lookAt(
-		glm::vec3(-1,3,.5),
-		glm::vec3(0,0,0),
-		glm::vec3(0,1,0)
-	)),
-	model(glm::mat4(1.0f))
+			model(glm::mat4(1.0f)), mvp(0)
 {
 
 }
@@ -85,10 +81,10 @@ Triangles::_init()
 }
 
 int
-Triangles::_display()
+Triangles::_display(const Camera& c)
 {
 
-	glm::mat4 MVP = projection * view * model;
+	glm::mat4 MVP = c.projection() * c.view() * model;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
