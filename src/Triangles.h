@@ -8,10 +8,10 @@
 #ifndef TRIANGLES_H_
 #define TRIANGLES_H_
 
-#include "App.h"
 #include "Program.h"
 #include "VBO.h"
 #include "Camera.h"
+#include "Drawable.h"
 #include <glm/glm.hpp>
 
 namespace domahony {
@@ -19,27 +19,17 @@ namespace opengl {
 
 using domahony::framework::Camera;
 
-class Triangles: public domahony::sdl::App {
+class Triangles: public domahony::applications::Drawable {
 public:
-	Triangles(const int&width=640, const int&height=480);
+	Triangles(const GLint& mvp);
 
 	virtual ~Triangles();
 protected:
-	int _init();
-	int _display(const Camera&);
+	void draw(const Camera&) const;
 
 private:
-	SDL_Surface *surface;
-	GLuint vao;
-	Program program;
 	VBO vbo1;
-	VBO vbo2;
-	int width;
-	int height;
-
 	glm::mat4 model;
-
-	GLuint mvp;
 };
 
 } /* namespace opengl */
