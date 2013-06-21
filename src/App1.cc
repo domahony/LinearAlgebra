@@ -9,6 +9,7 @@
 #include "App1.h"
 #include "OpenGL.h"
 #include "Triangles.h"
+#include "Axis.h"
 
 namespace domahony {
 namespace applications {
@@ -50,6 +51,7 @@ _init()
 
 	mvp = glGetUniformLocation(program, "MVP");
 
+	objects.push_back(new domahony::opengl::Axis(mvp));
 	objects.push_back(new domahony::opengl::Triangles(mvp));
 
 	glViewport(0, 0, width, height);
