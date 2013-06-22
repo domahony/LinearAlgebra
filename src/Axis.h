@@ -5,8 +5,8 @@
  *      Author: domahony
  */
 
-#ifndef TRIANGLES_H_
-#define TRIANGLES_H_
+#ifndef AXIS_H_
+#define AXIS_H_
 
 #include "Program.h"
 #include "VBO.h"
@@ -19,11 +19,11 @@ namespace opengl {
 
 using domahony::framework::Camera;
 
-class Triangles: public domahony::applications::Drawable {
+class Axis: public domahony::applications::Drawable {
 public:
-	Triangles(const GLint& mvp);
+	Axis(const GLint& mvp);
 
-	virtual ~Triangles();
+	virtual ~Axis();
 protected:
 	void draw(const Camera&) const;
 
@@ -34,4 +34,4 @@ private:
 
 } /* namespace opengl */
 } /* namespace domahony */
-#endif /* TRIANGLES_H_ */
+#endif /* AXIS_H_ */

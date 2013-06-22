@@ -20,12 +20,11 @@ using std::ifstream;
 
 static string get_file_contents(const string& file); 
 
-GLint create_shader(GLenum type, const string& file)
+GLint create_shader(GLenum type, const string& str)
 {
 	GLint shader = glCreateShader(type);
-	string src = get_file_contents(file);
-	const char* csrc = src.c_str(); 
-	glShaderSource(shader, 1, &csrc, NULL);
+	const char* shader_src = str.c_str();
+	glShaderSource(shader, 1, &shader_src, NULL);
 	glCompileShader(shader);
 
 	GLint status;
@@ -55,7 +54,7 @@ GLint create_shader(GLenum type, const string& file)
 
 		}
 
-		std::cerr << "Compile Failure in " << strShaderType << " shader " << file << std::endl;
+		std::cerr << "Compile Failure in " << strShaderType << " shader " << str << std::endl;
 		std::cerr << strInfoLog;
 	}
 	return shader;
