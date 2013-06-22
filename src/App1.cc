@@ -11,6 +11,9 @@
 #include "Triangles.h"
 #include "Axis.h"
 
+extern char fragment[];
+extern char vertex[];
+
 namespace domahony {
 namespace applications {
 
@@ -41,10 +44,16 @@ height(height)
 int App1::
 _init()
 {
-	Shader vshader(GL_VERTEX_SHADER, "/home/domahony/Projects/workspace/LinearAlgebra/shaders/vertex.glsl");
+
+
+	for (int i = 0; fragment[i]; i++) {
+		std::cout << fragment[i];
+	}
+
+	Shader vshader(GL_VERTEX_SHADER, vertex);
 	program.attach_shader(vshader);
 
-	Shader fshader(GL_FRAGMENT_SHADER, "/home/domahony/Projects/workspace/LinearAlgebra/shaders/fragment.glsl");
+	Shader fshader(GL_FRAGMENT_SHADER, fragment);
 	program.attach_shader(fshader);
 
 	program.link();
