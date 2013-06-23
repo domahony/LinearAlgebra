@@ -42,6 +42,18 @@
     <ClCompile Include="src\VBO.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\App1.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Axis.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Drawable.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fragment.shader.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h">
@@ -68,5 +80,18 @@
     <ClInclude Include="src\VBO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\App1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Axis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Drawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\fragment.glsl" />
+    <None Include="src\Makefile.am" />
   </ItemGroup>
 </Project>

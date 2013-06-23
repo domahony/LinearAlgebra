@@ -12,7 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cc" />
+    <ClCompile Include="src\App1.cc" />
+    <ClCompile Include="src\Axis.cc" />
     <ClCompile Include="src\Camera.cc" />
+    <ClCompile Include="src\Drawable.cc" />
+    <ClCompile Include="src\fragment.shader.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\OpenGL.cc" />
     <ClCompile Include="src\Program.cc" />
@@ -23,13 +27,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\App1.h" />
+    <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Drawable.h" />
     <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\Program.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\Triangles.h" />
     <ClInclude Include="src\VBO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\fragment.glsl" />
+    <None Include="src\Makefile.am" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BE8EE073-65F7-47DB-9E43-1E513CD78A93}</ProjectGuid>
@@ -59,7 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\glm-0.9.4.4;D:\SDL-1.2.15\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
