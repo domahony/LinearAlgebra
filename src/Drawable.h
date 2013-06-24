@@ -10,20 +10,27 @@
 
 #include "Camera.h"
 #include "OpenGL.h"
+#include "VBO.h"
 
 namespace domahony {
 namespace applications {
 
 class Drawable {
 public:
-	Drawable(const GLint& mvp): mvp(mvp) {}
+	Drawable(const std::vector<GLfloat>& data, const glm::mat4& location, const GLint& mvp);
+	void draw(const domahony::framework::Camera&);
 
-	virtual void draw(const domahony::framework::Camera&) const = 0;
 	virtual ~Drawable() {}
 
 protected:
-	const GLint mvp;
+	virtual void enableVertexAttributes() const = 0;
+	virtual void doDraw() const = 0;
+	virtual void disableVertexAttributes() const = 0;
 
+private:
+	const GLint mvp;
+	glm::mat4 location;
+	domahony::opengl::VBO vbo;
 
 };
 

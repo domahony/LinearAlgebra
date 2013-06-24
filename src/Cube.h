@@ -1,27 +1,23 @@
 /*
- * Triangles.h
+ * Cube.h
  *
- *  Created on: 2013-06-15
+ *  Created on: 2013-06-24
  *      Author: domahony
  */
 
-#ifndef AXIS_H_
-#define AXIS_H_
+#ifndef CUBE_H_
+#define CUBE_H_
 
-#include "Program.h"
-#include "VBO.h"
-#include "Camera.h"
 #include "Drawable.h"
 #include <glm/glm.hpp>
 
 namespace domahony {
 namespace opengl {
 
-class Axis: public domahony::applications::Drawable {
-
+class Cube: public domahony::applications::Drawable {
 public:
-	Axis(const glm::mat4& location, const GLint& mvp);
-	virtual ~Axis();
+	Cube(const glm::mat4& location, const GLint& mvp);
+	virtual ~Cube();
 
 protected:
 	virtual void enableVertexAttributes() const;
@@ -29,6 +25,7 @@ protected:
 	virtual void disableVertexAttributes() const;
 
 };
+
 } /* namespace opengl */
 } /* namespace domahony */
-#endif /* AXIS_H_ */
+#endif /* CUBE_H_ */

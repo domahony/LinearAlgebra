@@ -10,6 +10,7 @@
 #include "OpenGL.h"
 #include "Triangles.h"
 #include "Axis.h"
+#include "Cube.h"
 
 
 
@@ -69,8 +70,9 @@ _init()
 
 	mvp = glGetUniformLocation(program, "MVP");
 
-	objects.push_back(new domahony::opengl::Axis(mvp));
-	objects.push_back(new domahony::opengl::Triangles(mvp));
+	objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
+	objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
+	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), mvp));
 
 	glViewport(0, 0, width, height);
 

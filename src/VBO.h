@@ -23,6 +23,11 @@ public:
 		return vbo;
 	}
 
+	void bind() const {
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	}
+
+
 	template<typename T>
 	int buffer_data(const std::vector<T>& data);
 

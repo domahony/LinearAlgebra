@@ -15,11 +15,8 @@
 namespace domahony {
 namespace opengl {
 
-using domahony::framework::Camera;
-
-Triangles::Triangles(const GLint& mvp):
-			Drawable(mvp),
-			vbo1(), model(glm::mat4(1.0f))
+static std::vector<GLfloat>
+data()
 {
 	GLfloat vertexPositions[] = {
 	    0.75f, 0.75f, 0.0f, 1.0f,
@@ -28,40 +25,38 @@ Triangles::Triangles(const GLint& mvp):
 	};
 
 	std::vector<GLfloat> data(vertexPositions, vertexPositions + (sizeof(vertexPositions) / sizeof(GLfloat)));
-	vbo1.buffer_data(data);
 
-	GLfloat lines[] = {
-	    1.0f, 0.0f, 0.0f, 1.0f,
-	    -1.0f, 0.0f, 0.0f, 1.0f,
+	return data;
+}
 
-	    0.0f, 1.0f, 0.0f, 1.0f,
-	    0.0f, -1.0f, 0.0f, 1.0f,
+Triangles::
+Triangles(const glm::mat4& location, const GLint& mvp):
+			domahony::applications::Drawable(data(), location, mvp)
+{
 
-	    0.0f, 0.0f, 1.0f, 1.0f,
-	    0.0f, 0.0f, -1.0f, 1.0f,
+}
 
-	};
+void Triangles::
+enableVertexAttributes() const
+{
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+}
 
-	std::vector<GLfloat> data2(lines, lines + (sizeof(lines) / sizeof(GLfloat)));
+void Triangles::
+doDraw() const
+{
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void Triangles::
+disableVertexAttributes() const
+{
+	glDisableVertexAttribArray(0);
 }
 
 Triangles::~Triangles() {
 	// TODO Auto-generated destructor stub
-}
-
-void
-Triangles::draw(const Camera& c) const
-{
-	glm::mat4 MVP = c.projection() * c.view() * model;
-	glUniformMatrix4fv(mvp, 1, GL_FALSE, &MVP[0][0]);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo1);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(0);
-
-	std::cout << "Displayed Called" << std::endl;
 }
 
 } /* namespace opengl */
