@@ -24,6 +24,7 @@
     <ClCompile Include="src\Test.cc" />
     <ClCompile Include="src\Triangles.cc" />
     <ClCompile Include="src\VBO.cc" />
+    <ClCompile Include="src\vertex.shader.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
