@@ -31,6 +31,7 @@ init_surface(const int& width, const int&height)
 static GLuint
 init_vao()
 {
+	glewInit();
 	GLuint ret;
 	glGenVertexArrays(1, &ret);
 	glBindVertexArray(ret);
