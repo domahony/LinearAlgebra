@@ -21,7 +21,7 @@ public:
 	void start();
 	int init();
 
-	bool display() {
+	int display() {
 		return _display(camera);
 	}
 

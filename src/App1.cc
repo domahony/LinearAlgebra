@@ -11,8 +11,7 @@
 #include "Triangles.h"
 #include "Axis.h"
 
-extern char fragment[];
-extern char vertex[];
+
 
 namespace domahony {
 namespace applications {

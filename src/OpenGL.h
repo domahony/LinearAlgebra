@@ -8,8 +8,9 @@
 #ifndef OPENGL_H_
 #define OPENGL_H_
 
-#ifdef __WIN32
+#ifdef _WIN32
 #include <Windows.h>
+#include <GL/glew.h>
 #endif
 
 #define GL_GLEXT_PROTOTYPES 1

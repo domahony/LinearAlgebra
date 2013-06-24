@@ -76,7 +76,7 @@ start()
 bool App::
 resize(const SDL_ResizeEvent &)
 {
-	display();
+	return display();
 }
 
 bool App::

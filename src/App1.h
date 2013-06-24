@@ -15,6 +15,15 @@
 #include "Program.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern char fragment[];
+extern char vertex[];
+#ifdef __cplusplus
+}
+#endif
+
 namespace domahony {
 namespace applications {
 

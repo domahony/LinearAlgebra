@@ -9,4 +9,6 @@ main(int argc, char **argv)
 	domahony::sdl::App& a = t;
 
 	a.start();
+
+	return 1;
 }

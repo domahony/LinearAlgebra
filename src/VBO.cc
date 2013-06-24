@@ -34,6 +34,8 @@ buffer_data(const std::vector<T>& data)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(T), &data[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return 1;
 }
 
 template int VBO::buffer_data<GLfloat>(const std::vector<GLfloat>&);

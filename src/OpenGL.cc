@@ -9,7 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <cerrno>
-#include <gl.h>
+#include <vector>
 
 namespace domahony {
 
@@ -31,11 +31,13 @@ GLint create_shader(GLenum type, const string& str)
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
 	if (status == GL_FALSE) {
-		GLint infoLogLength;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-		
-		GLchar strInfoLog[infoLogLength + 1];
-		glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
+
+		GLint tmp;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &tmp);
+
+		std::vector<GLchar> strInfoLog(tmp);
+
+		glGetShaderInfoLog(shader, tmp, NULL, &strInfoLog[0]);
 		
 		const char *strShaderType = NULL;		
 
@@ -55,7 +57,7 @@ GLint create_shader(GLenum type, const string& str)
 		}
 
 		std::cerr << "Compile Failure in " << strShaderType << " shader " << str << std::endl;
-		std::cerr << strInfoLog;
+		std::cerr << &strInfoLog[0];
 	}
 	return shader;
 }

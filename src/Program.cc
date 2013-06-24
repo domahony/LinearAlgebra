@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <vector>
 #include "OpenGL.h"
 #include "Program.h"
 #include "Shader.h"
@@ -36,9 +37,10 @@ link()
 		GLint len;	
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
 
-		GLchar log[len + 1];
-		glGetProgramInfoLog(program, len, NULL, log);
-		std::cerr << "Linker failure: " << log << std::endl;
+		std::vector<GLchar> log(len);
+		
+		glGetProgramInfoLog(program, len, NULL, &log[0]);
+		std::cerr << "Linker failure: " << &log[0] << std::endl;
 	}
 }
 

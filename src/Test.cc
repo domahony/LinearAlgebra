@@ -60,12 +60,16 @@ int Test::_init() {
 	glBindBuffer(GL_ARRAY_BUFFER, buf);
 	
 	glVertexAttribPointer(0, 3, GL_BYTE, GL_FALSE, 0, 0);	
+
+	return 1;
 }
 
 int Test::_display() {
 	std::cout << "Display" << std::endl;
 	glDrawArrays(GL_LINES, 0, 6);
 	SDL_GL_SwapBuffers();
+
+	return 1;
 }
 
 } /* namespace test */
