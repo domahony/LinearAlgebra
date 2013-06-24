@@ -21,4 +21,4 @@ fi
 AC_SUBST(GL_CFLAGS, "-I/usr/include/GL")
 AC_SUBST(GL_LDFLAGS, "-lGL")
 
-AC_OUTPUT(Makefile shaders/Makefile src/Makefile)
+AC_OUTPUT(Makefile src/Makefile)

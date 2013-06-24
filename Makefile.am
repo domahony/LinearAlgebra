@@ -1,1 +1,1 @@
-SUBDIRS = shaders src
+SUBDIRS = src

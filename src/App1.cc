@@ -18,6 +18,16 @@ namespace applications {
 
 using domahony::opengl::Shader;
 
+static SDL_Surface*
+init_surface(const int& width, const int&height)
+{
+	SDL_Surface* ret = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
+#ifdef _WIN32
+	glewInit();
+#endif
+	return ret;
+}
+
 static GLuint
 init_vao()
 {
@@ -30,7 +40,7 @@ init_vao()
 
 App1::
 App1(const int& width, const int& height) :
-surface(SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)),
+surface(init_surface(width, height)),
 vao(init_vao()),
 objects(),
 width(width),
