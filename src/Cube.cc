@@ -15,8 +15,10 @@ namespace domahony {
 namespace opengl {
 
 static std::vector<GLfloat> data() {
-	GLfloat vertexPositions[] = { 0.75f, 0.75f, 0.0f, 1.0f, 0.75f, -0.75f, 0.0f,
-			1.0f, -0.75f, -0.75f, 0.0f, 1.0f, };
+	GLfloat vertexPositions[] = {
+			0.75f, 0.75f, 0.0f, 1.0f, 0.75f, -0.75f, 0.0f,
+			1.0f, -0.75f, -0.75f, 0.0f, 1.0f,
+	};
 
 	std::vector<GLfloat> data(vertexPositions,
 			vertexPositions + (sizeof(vertexPositions) / sizeof(GLfloat)));

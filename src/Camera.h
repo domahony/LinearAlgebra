@@ -18,8 +18,9 @@ class Camera {
 public:
 	Camera() :
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
+		location(glm::vec3(4,3,3)),
 		m_view(glm::lookAt(
-				glm::vec3(4,3,3),
+				location,
 				glm::vec3(0,0,0),
 				glm::vec3(0,1,0)))
 	{
@@ -34,10 +35,25 @@ public:
 		return m_projection;
 	}
 
+	void left() {location 	+= glm::vec3(-.1, 0, 0); setView();}
+	void right() {location 	+= glm::vec3(.1, 0, 0); setView();}
+
+	void up() {location 	+= glm::vec3(0, .1, 0); setView();}
+	void down() {location 	+= glm::vec3(0, -.1, 0); setView();}
+
+	void in() {location 	+= glm::vec3(0, 0, -.1); setView();}
+	void out() {location 	+= glm::vec3(0, 0, .1); setView();}
 
 private:
-	glm::mat4 m_view;
+	void setView() {
+		m_view = glm::lookAt(location, glm::vec3(0,0,0), glm::vec3(0,1,0));
+	}
+
+private:
 	glm::mat4 m_projection;
+	glm::vec3 location;
+	glm::mat4 m_view;
+
 };
 
 } /* namespace framework */

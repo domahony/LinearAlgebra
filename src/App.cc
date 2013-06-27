@@ -20,7 +20,7 @@ App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false)
 int App::
 init()
 {
-
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	return _init();
 }
 
@@ -37,34 +37,40 @@ start()
 		SDL_WaitEvent(&event);
 		do {
 
+			bool ret = false;
+
 			switch (event.type) {
 			case SDL_ACTIVEEVENT:
-				activate(event.active);
+				ret = activate(event.active);
 				break;
 			case SDL_KEYUP:
-				key(event.key);
+				ret = key(event.key);
 				break;
 			case SDL_KEYDOWN:
-				key(event.key);
+				ret = key(event.key);
 				break;
 			case SDL_MOUSEMOTION:
-				motion(event.motion);
+				ret = motion(event.motion);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				button(event.button);
+				ret = button(event.button);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				button(event.button);
+				ret = button(event.button);
 				break;
 			case SDL_VIDEORESIZE:
-				resize(event.resize);
+				ret = resize(event.resize);
 				break;
 			case SDL_VIDEOEXPOSE:
-				resize(event.resize);
+				ret = resize(event.resize);
 				break;
 			case SDL_QUIT:
-				quit(event.quit);
+				ret = quit(event.quit);
 				break;
+			}
+
+			if (ret) {
+				display();
 			}
 
 		} while (SDL_PollEvent(&event));

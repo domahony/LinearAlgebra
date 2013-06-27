@@ -11,6 +11,7 @@
 #include "Triangles.h"
 #include "Axis.h"
 #include "Cube.h"
+#include "Sphere.h"
 
 
 
@@ -54,12 +55,6 @@ height(height)
 int App1::
 _init()
 {
-
-
-	for (int i = 0; fragment[i]; i++) {
-		std::cout << fragment[i];
-	}
-
 	Shader vshader(GL_VERTEX_SHADER, vertex);
 	program.attach_shader(vshader);
 
@@ -70,13 +65,53 @@ _init()
 
 	mvp = glGetUniformLocation(program, "MVP");
 
-	objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
-	objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
+	//objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
+	//objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
+	objects.push_back(new domahony::opengl::Sphere(glm::mat4(1.0f), mvp));
 	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), mvp));
 
 	glViewport(0, 0, width, height);
 
 	return 1;
+}
+
+bool App1::
+key(const SDL_KeyboardEvent& e)
+{
+
+	bool ret = false;
+	if (e.type == SDL_KEYUP) {
+		return ret;
+	}
+
+	switch (e.keysym.sym) {
+	case SDLK_UP:
+		camera.up();
+		ret = true;
+		break;
+	case SDLK_DOWN:
+		camera.down();
+		ret = true;
+		break;
+	case SDLK_LEFT:
+		camera.left();
+		ret = true;
+		break;
+	case SDLK_RIGHT:
+		camera.right();
+		ret = true;
+		break;
+	case SDLK_i:
+		camera.in();
+		ret = true;
+		break;
+	case SDLK_o:
+		camera.out();
+		ret = true;
+		break;
+	}
+
+	return ret;
 }
 
 int App1::

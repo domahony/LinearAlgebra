@@ -36,6 +36,9 @@ public:
 
 	virtual ~App1();
 
+protected:
+	bool key(const SDL_KeyboardEvent& k);
+
 private:
 	SDL_Surface *surface;
 	GLuint vao;

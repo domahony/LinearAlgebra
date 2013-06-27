@@ -39,8 +39,9 @@ protected:
 
 	virtual ~App() {}
 
-private:
 	domahony::framework::Camera camera;
+
+private:
 	int done;
 	const int initialized;
 };
