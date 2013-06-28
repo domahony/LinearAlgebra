@@ -21,6 +21,7 @@
     <ClCompile Include="src\OpenGL.cc" />
     <ClCompile Include="src\Program.cc" />
     <ClCompile Include="src\Shader.cc" />
+    <ClCompile Include="src\Sphere.cc" />
     <ClCompile Include="src\Test.cc" />
     <ClCompile Include="src\Triangles.cc" />
     <ClCompile Include="src\VBO.cc" />
@@ -35,6 +36,7 @@
     <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\Program.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Sphere.h" />
     <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\Triangles.h" />
     <ClInclude Include="src\VBO.h" />

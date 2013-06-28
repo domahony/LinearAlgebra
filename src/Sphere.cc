@@ -5,6 +5,8 @@
  *      Author: domahony
  */
 
+#define _USE_MATH_DEFINES
+
 #include "Sphere.h"
 #include <vector>
 #include <cmath>

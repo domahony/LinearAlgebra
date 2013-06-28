@@ -9,6 +9,7 @@
 #define OPENGL_H_
 
 #ifdef _WIN32
+
 #include <Windows.h>
 #include <GL/glew.h>
 #endif
