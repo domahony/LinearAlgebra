@@ -4,5 +4,9 @@ out vec4 outputColor;
 
 void main()
 {
-	outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	if (gl_FrontFacing) {
+		outputColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	} else {
+		outputColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	}
 }

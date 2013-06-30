@@ -16,7 +16,7 @@ namespace opengl {
 
 class VBO {
 public:
-	VBO();
+	VBO(const GLenum& type=GL_ARRAY_BUFFER);
 	virtual ~VBO();
 
 	operator GLuint () const {
@@ -24,7 +24,7 @@ public:
 	}
 
 	void bind() const {
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBindBuffer(type, vbo);
 	}
 
 
@@ -32,6 +32,7 @@ public:
 	int buffer_data(const std::vector<T>& data);
 
 private:
+	GLenum type;
 	GLuint vbo;
 };
 

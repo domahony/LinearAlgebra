@@ -9,6 +9,7 @@
 #define SPHERE_H_
 
 #include "Drawable.h"
+#include "VBO.h"
 
 namespace domahony {
 namespace opengl {
@@ -24,7 +25,9 @@ protected:
 	virtual void disableVertexAttributes() const;
 
 private:
+	VBO idx;
 	int nverts;
+	int idx_size;
 };
 
 } /* namespace opengl */

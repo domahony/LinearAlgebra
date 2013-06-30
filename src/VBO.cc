@@ -19,7 +19,7 @@ generate_vbo()
 	return ret;
 }
 
-VBO::VBO() : vbo(generate_vbo()){
+VBO::VBO(const GLenum& type) : type(type), vbo(generate_vbo()){
 }
 
 VBO::~VBO() {
@@ -31,15 +31,17 @@ template<typename T>
 int VBO::
 buffer_data(const std::vector<T>& data)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(T), &data[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(type, vbo);
+	glBufferData(type, data.size() * sizeof(T), &data[0], GL_STATIC_DRAW);
+	glBindBuffer(type, 0);
 
 	return 1;
 }
 
 template int VBO::buffer_data<GLfloat>(const std::vector<GLfloat>&);
 template int VBO::buffer_data<GLbyte>(const std::vector<GLbyte>&);
+template int VBO::buffer_data<GLushort>(const std::vector<GLushort>&);
+template int VBO::buffer_data<GLuint>(const std::vector<GLuint>&);
 
 } /* namespace opengl */
 } /* namespace domahony */

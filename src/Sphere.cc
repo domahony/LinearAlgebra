@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-#define NSEGMENTS 5
+#define NSEGMENTS 18
 
 namespace domahony {
 namespace opengl {
@@ -46,7 +46,7 @@ data(int &nverts)
 	std::vector<GLfloat> data;
 	nverts = 0;
 
-	double nsegments = 48;
+	double nsegments = NSEGMENTS;
 
 	double phi = -1.0f * (M_PI / 2.0f);
 	double inc = (M_PI) / static_cast<float>(nsegments);
@@ -64,10 +64,26 @@ data(int &nverts)
 }
 
 Sphere::
-Sphere(const glm::mat4& location, const GLint& mvp) : domahony::applications::Drawable(data(nverts), location, mvp)
+Sphere(const glm::mat4& location, const GLint& mvp) : domahony::applications::Drawable(data(nverts), location, mvp),
+idx(GL_ELEMENT_ARRAY_BUFFER)
 {
-	// TODO Auto-generated constructor stub
+	std::vector<GLushort> idx_data;
 
+	int nsegments = NSEGMENTS;
+
+	for (GLushort strip = 0; strip <= nsegments; strip++) {
+
+		for (int i = 0; i <= nsegments; i++) {
+			idx_data.push_back(strip * nsegments + i);
+			idx_data.push_back(((strip + 1) * nsegments) + i);
+		}
+
+		//idx_data.push_back(((strip + 1) * nsegments) + (nsegments));
+		//idx_data.push_back(((strip + 1) * nsegments));
+	}
+
+	idx.buffer_data(idx_data);
+	idx_size = idx_data.size();
 }
 
 Sphere::~Sphere() {
@@ -84,7 +100,16 @@ enableVertexAttributes() const
 void Sphere::
 doDraw() const
 {
-	glDrawArrays(GL_LINE_STRIP, 0, nverts);
+	//glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glPolygonMode( GL_FRONT, GL_LINE );
+	glPolygonMode( GL_BACK, GL_FILL );
+	//glPolygonMode( GL_FRONT, GL_POINT );
+	//glPolygonMode( GL_BACK, GL_FILL );
+	//glPolygonMode(GL_BACK, GL_FILL );
+	//glDrawArrays(GL_LINE_STRIP, 0, nverts);
+	idx.bind();
+	glDrawElements(GL_TRIANGLE_STRIP, idx_size, GL_UNSIGNED_SHORT, 0);
 }
 
 void Sphere::
