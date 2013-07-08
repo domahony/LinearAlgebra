@@ -24,6 +24,9 @@ protected:
 	virtual void doDraw() const;
 	virtual void disableVertexAttributes() const;
 
+private:
+	VBO idx;
+
 };
 
 } /* namespace opengl */
