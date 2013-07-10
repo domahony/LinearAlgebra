@@ -67,7 +67,7 @@ _init()
 
 	//objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
 	//objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
-	//objects.push_back(new domahony::opengl::Sphere(glm::mat4(1.0f), mvp));
+	objects.push_back(new domahony::opengl::Sphere(glm::mat4(1.0f), mvp));
 	objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), mvp));
 
 	glViewport(0, 0, width, height);

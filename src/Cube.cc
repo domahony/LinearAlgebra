@@ -101,8 +101,8 @@ void Cube::enableVertexAttributes() const {
 
 void Cube::doDraw() const {
 	idx.bind();
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glPolygonMode( GL_FRONT, GL_FILL);
 	glPolygonMode( GL_BACK, GL_LINE);
 	glDrawElements(GL_TRIANGLE_STRIP, 20, GL_UNSIGNED_SHORT, 0);

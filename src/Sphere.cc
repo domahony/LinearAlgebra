@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-#define NSEGMENTS 18
+#define NSEGMENTS 30
 
 namespace domahony {
 namespace opengl {
@@ -34,6 +34,19 @@ disk(const int& nsegments, const float& y, const float& r, std::vector<GLfloat>&
 			data.push_back(x);
 			data.push_back(y);
 			data.push_back(z);
+			data.push_back(1);
+
+			data.push_back(1);
+			data.push_back(10);
+
+			/*
+			data.push_back(1);
+			data.push_back(1);
+			data.push_back(1);
+			data.push_back(1);
+			data.push_back(0);
+			data.push_back(0);
+			*/
 
 			nverts++;
 	}
@@ -77,9 +90,6 @@ idx(GL_ELEMENT_ARRAY_BUFFER)
 			idx_data.push_back(strip * nsegments + i);
 			idx_data.push_back(((strip + 1) * nsegments) + i);
 		}
-
-		//idx_data.push_back(((strip + 1) * nsegments) + (nsegments));
-		//idx_data.push_back(((strip + 1) * nsegments));
 	}
 
 	idx.buffer_data(idx_data);
@@ -94,14 +104,16 @@ void Sphere::
 enableVertexAttributes() const
 {
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(4 * sizeof(GLfloat)));
 }
 
 void Sphere::
 doDraw() const
 {
 	//glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glCullFace(GL_BACK);
 	glPolygonMode( GL_FRONT, GL_LINE );
 	glPolygonMode( GL_BACK, GL_FILL );
 	//glPolygonMode( GL_FRONT, GL_POINT );
@@ -116,6 +128,7 @@ void Sphere::
 disableVertexAttributes() const
 {
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 }
 
 } /* namespace opengl */
