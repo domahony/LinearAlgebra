@@ -1,0 +1,246 @@
+/*
+ * IcoSphere.cc
+ *
+ *  Created on: 2013-07-17
+ *      Author: domahony
+ */
+
+#include "IcoSphere.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/normal.hpp>
+#include <cmath>
+#include <map>
+#include <iostream>
+
+namespace domahony {
+namespace opengl {
+
+using glm::mat4;
+using glm::vec3;
+using glm::normalize;
+using glm::triangleNormal;
+
+const double IcoSphere::phi = (1.0 + sqrt(5)) / 2.0;
+
+struct edge_key {
+
+	edge_key(const int& i1, const int& i2)
+	{
+		pt[0] = i1 < i2 ? i1 : i2;
+		pt[1] = i1 < i2 ? i2 : i1;
+	}
+
+	bool operator< (const edge_key& other) const {
+
+		if (this->pt[0] < other.pt[0]) {
+			return true;
+		}
+
+		return this->pt[1] < other.pt[1];
+	}
+
+	int pt[2];
+};
+
+struct comp {
+	bool operator() (const edge_key& l, const edge_key& r) {
+		return l < r;
+	}
+};
+
+struct triangle_idx {
+	triangle_idx(const int& idx0, const int& idx1, const int& idx2) {
+		idx[0] = idx0;
+		idx[1] = idx1;
+		idx[2] = idx2;
+	}
+
+	int idx[3];
+};
+
+struct triangle {
+
+	triangle(const std::vector<vec3>& verts, const int& idx0, const int& idx1, const int& idx2)
+	{
+		pt[0] = verts[idx0];
+		pt[1] = verts[idx1];
+		pt[2] = verts[idx2];
+
+		color = vec3(1 , 0,  0);
+
+		normal = triangleNormal(pt[0], pt[1], pt[2]);
+	}
+
+	vec3 pt[3];
+	vec3 color;
+	vec3 normal;
+};
+
+static int 
+get_middle_point(std::map<edge_key, int>& m, 
+	std::vector<vec3>& v, int p1, int p2) 
+{
+	edge_key e(p1, p2);
+	std::map<edge_key, int>::iterator iter = m.find(e);
+
+	if (iter != m.end()) {
+		return iter->second;
+	}
+
+	vec3 v1 = v[p1];
+	vec3 v2 = v[p2];
+
+	vec3 mid(
+			(v1.x + v2.x)/2.0,
+			(v1.y + v2.y)/2.0,
+			(v1.z + v2.z)/2.0
+	);
+
+	v.push_back(normalize(mid));
+	int idx = v.size() - 1;
+
+	m.insert(std::pair<edge_key, int>(e, idx));
+
+	return idx;
+}
+
+static std::vector<GLfloat>
+data(int& nverts)
+{
+	std::vector<vec3> verts;
+	/*
+	 * use the http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
+	 */
+
+	verts.push_back(normalize(vec3(-1,IcoSphere::phi, 0)));
+	verts.push_back(normalize(vec3(1,IcoSphere::phi, 0)));
+	verts.push_back(normalize(vec3(-1,-IcoSphere::phi, 0)));
+	verts.push_back(normalize(vec3(1,-IcoSphere::phi, 0)));
+
+	verts.push_back(normalize(vec3(0,-1,IcoSphere::phi)));
+	verts.push_back(normalize(vec3(0,1,IcoSphere::phi)));
+	verts.push_back(normalize(vec3(0,-1,-IcoSphere::phi)));
+	verts.push_back(normalize(vec3(0,1,-IcoSphere::phi)));
+
+	verts.push_back(normalize(vec3(IcoSphere::phi, 0, -1)));
+	verts.push_back(normalize(vec3(IcoSphere::phi, 0, 1)));
+	verts.push_back(normalize(vec3(-IcoSphere::phi, 0, -1)));
+	verts.push_back(normalize(vec3(-IcoSphere::phi, 0, 1)));
+
+	std::vector<triangle_idx> triangles;
+	triangles.push_back(triangle_idx( 0, 11, 5));
+	triangles.push_back(triangle_idx( 0, 5, 1));
+	triangles.push_back(triangle_idx( 0, 1, 7));
+	triangles.push_back(triangle_idx( 0, 7, 10));
+	triangles.push_back(triangle_idx( 0, 10, 11));
+
+	triangles.push_back(triangle_idx( 1, 5, 9));
+	triangles.push_back(triangle_idx( 5, 11, 4));
+	triangles.push_back(triangle_idx( 11, 10, 2));
+	triangles.push_back(triangle_idx( 10, 7, 6));
+	triangles.push_back(triangle_idx( 7, 1, 8));
+
+	triangles.push_back(triangle_idx( 3, 9, 4));
+	triangles.push_back(triangle_idx( 3, 4, 2));
+	triangles.push_back(triangle_idx( 3, 2, 6));
+	triangles.push_back(triangle_idx( 3, 6, 8));
+	triangles.push_back(triangle_idx( 3, 8, 9));
+
+	triangles.push_back(triangle_idx( 4, 9, 5));
+	triangles.push_back(triangle_idx( 2, 4, 11));
+	triangles.push_back(triangle_idx( 6, 2, 10));
+	triangles.push_back(triangle_idx( 8, 6, 7));
+	triangles.push_back(triangle_idx( 9, 8, 1));
+
+	std::vector<GLfloat> ret;
+
+	std::map<edge_key, int> m;
+
+	for (int i = 0; i < 3; i++) {
+		std::vector<triangle_idx> triangles2;
+		for (std::vector<triangle_idx>::iterator iter = triangles.begin(); iter != triangles.end(); iter++) {
+
+			int a = get_middle_point(m, verts, iter->idx[0], iter->idx[1]);
+			int b = get_middle_point(m, verts, iter->idx[1], iter->idx[2]);
+			int c = get_middle_point(m, verts, iter->idx[2], iter->idx[0]);
+
+			triangles2.push_back(triangle_idx(iter->idx[0], a, c));
+			triangles2.push_back(triangle_idx(iter->idx[1], b, a));
+			triangles2.push_back(triangle_idx(iter->idx[2], c, b));
+			triangles2.push_back(triangle_idx(a, b, c));
+		}
+
+		triangles = triangles2;
+	}
+
+	nverts = 0;
+	for (std::vector<triangle_idx>::iterator iter = triangles.begin(); iter != triangles.end(); iter++) {
+			ret.push_back(verts[iter->idx[0]].x);
+			ret.push_back(verts[iter->idx[0]].y);
+			ret.push_back(verts[iter->idx[0]].z);
+
+			ret.push_back(verts[iter->idx[1]].x);
+			ret.push_back(verts[iter->idx[1]].y);
+			ret.push_back(verts[iter->idx[1]].z);
+
+			ret.push_back(verts[iter->idx[2]].x);
+			ret.push_back(verts[iter->idx[2]].y);
+			ret.push_back(verts[iter->idx[2]].z);
+			nverts+=9;
+	}
+
+	std::cout << "Number of triangles: " << triangles.size() << std::endl;
+
+	return ret;
+}
+
+
+IcoSphere::IcoSphere(const mat4& location, const GLint& mvp) : domahony::applications::Drawable(data(nverts), location, mvp),
+idx(GL_ELEMENT_ARRAY_BUFFER), idx_size(0)
+{
+	// TODO Auto-generated constructor stub
+
+}
+
+IcoSphere::~IcoSphere() {
+	// TODO Auto-generated destructor stub
+}
+
+void IcoSphere::
+enableVertexAttributes() const
+{
+	glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+}
+
+void IcoSphere::
+doDraw() const
+{
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	glPolygonMode( GL_FRONT, GL_LINE );
+	glPolygonMode( GL_BACK, GL_LINE );
+	//glPolygonMode( GL_FRONT, GL_POINT );
+	//glPolygonMode( GL_BACK, GL_FILL );
+	//glPolygonMode(GL_BACK, GL_FILL );
+	//glDrawArrays(GL_LINE_STRIP, 0, nverts);
+	idx.bind();
+	glDrawArrays(GL_TRIANGLES, 0, nverts);
+}
+
+void IcoSphere::
+disableVertexAttributes() const
+{
+	glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(1);
+	//glDisableVertexAttribArray(2);
+}
+
+} /* namespace opengl */
+} /* namespace domahony */
