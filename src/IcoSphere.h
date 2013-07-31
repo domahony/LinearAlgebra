@@ -23,13 +23,14 @@ public:
 
 protected:
 	virtual void enableVertexAttributes() const;
-	virtual void doDraw() const;
+	virtual void doDraw(const domahony::framework::Camera&) const;
 	virtual void disableVertexAttributes() const;
 
 private:
 	VBO idx;
 	int nverts;
 	int idx_size;
+	glm::vec4 light;
 };
 
 } /* namespace opengl */

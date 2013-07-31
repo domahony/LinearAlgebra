@@ -8,6 +8,7 @@
 #include "IcoSphere.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/normal.hpp>
 #include <cmath>
 #include <map>
@@ -59,9 +60,9 @@ struct triangle_idx {
 	int idx[3];
 };
 
-struct triangle {
+struct xtriangle {
 
-	triangle(const std::vector<vec3>& verts, const int& idx0, const int& idx1, const int& idx2)
+	xtriangle(const std::vector<vec3>& verts, const int& idx0, const int& idx1, const int& idx2)
 	{
 		pt[0] = verts[idx0];
 		pt[1] = verts[idx1];
@@ -103,6 +104,19 @@ get_middle_point(std::map<edge_key, int>& m,
 	m.insert(std::pair<edge_key, int>(e, idx));
 
 	return idx;
+}
+
+std::vector<int>
+find_neighbors(const std::vector<triangle_idx>& tri, const int& idx)
+{
+	std::vector<int> ret;
+	for (std::vector<triangle_idx>::const_iterator iter = tri.begin(); iter != tri.end(); iter++) {
+		if (iter->idx[0] == idx || iter->idx[1] == idx || iter->idx[2] == idx) {
+			ret.push_back(iter - tri.begin());
+		}
+	}
+
+	return ret;
 }
 
 static std::vector<GLfloat>
@@ -157,7 +171,7 @@ data(int& nverts)
 
 	std::map<edge_key, int> m;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		std::vector<triangle_idx> triangles2;
 		for (std::vector<triangle_idx>::iterator iter = triangles.begin(); iter != triangles.end(); iter++) {
 
@@ -180,15 +194,63 @@ data(int& nverts)
 			ret.push_back(verts[iter->idx[0]].y);
 			ret.push_back(verts[iter->idx[0]].z);
 
+			vec3 norm = triangleNormal(verts[iter->idx[0]], verts[iter->idx[1]], verts[iter->idx[2]]);
+			std::vector<int> neighbors = find_neighbors(triangles, iter->idx[0]);
+			for (std::vector<int>::iterator i = neighbors.begin(); i != neighbors.end(); i++) {
+				norm += triangleNormal(
+						verts[triangles[*i].idx[0]],
+						verts[triangles[*i].idx[1]],
+						verts[triangles[*i].idx[2]]);
+			}
+			norm = normalize(norm);
+			ret.push_back(norm.x);
+			ret.push_back(norm.y);
+			ret.push_back(norm.z);
+
 			ret.push_back(verts[iter->idx[1]].x);
 			ret.push_back(verts[iter->idx[1]].y);
 			ret.push_back(verts[iter->idx[1]].z);
 
+			neighbors = find_neighbors(triangles, iter->idx[1]);
+			norm = triangleNormal(verts[iter->idx[0]], verts[iter->idx[1]], verts[iter->idx[2]]);
+			for (std::vector<int>::iterator i = neighbors.begin(); i != neighbors.end(); i++) {
+				norm += triangleNormal(
+						verts[triangles[*i].idx[0]],
+						verts[triangles[*i].idx[1]],
+						verts[triangles[*i].idx[2]]);
+			}
+			norm = normalize(norm);
+			ret.push_back(norm.x);
+			ret.push_back(norm.y);
+			ret.push_back(norm.z);
+
 			ret.push_back(verts[iter->idx[2]].x);
 			ret.push_back(verts[iter->idx[2]].y);
 			ret.push_back(verts[iter->idx[2]].z);
-			nverts+=9;
+			neighbors = find_neighbors(triangles, iter->idx[2]);
+
+			norm = triangleNormal(verts[iter->idx[0]], verts[iter->idx[1]], verts[iter->idx[2]]);
+			for (std::vector<int>::iterator i = neighbors.begin(); i != neighbors.end(); i++) {
+				norm += triangleNormal(
+						verts[triangles[*i].idx[0]],
+						verts[triangles[*i].idx[1]],
+						verts[triangles[*i].idx[2]]);
+			}
+			norm = normalize(norm);
+			ret.push_back(norm.x);
+			ret.push_back(norm.y);
+			ret.push_back(norm.z);
+			/*
+			std::cout << "Normal: "
+					<< norm.x << ", "
+					<< norm.y << ", "
+					<< norm.z << ", "
+					<< std::endl;
+			*/
+
+			nverts+=18;
 	}
+
 
 	std::cout << "Number of triangles: " << triangles.size() << std::endl;
 
@@ -196,8 +258,9 @@ data(int& nverts)
 }
 
 
-IcoSphere::IcoSphere(const mat4& location, const GLint& mvp) : domahony::applications::Drawable(data(nverts), location, mvp),
-idx(GL_ELEMENT_ARRAY_BUFFER), idx_size(0)
+IcoSphere::IcoSphere(const mat4& location, const GLint& mvp) :
+		domahony::applications::Drawable(data(nverts), mvp),
+		idx(GL_ELEMENT_ARRAY_BUFFER), idx_size(0), light(0.866f, 0.5f, 0.0f, 0.0f)
 {
 	// TODO Auto-generated constructor stub
 
@@ -211,19 +274,22 @@ void IcoSphere::
 enableVertexAttributes() const
 {
 	glEnableVertexAttribArray(0);
-	//glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(1);
 	//glEnableVertexAttribArray(2);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 }
 
 void IcoSphere::
-doDraw() const
+doDraw(const domahony::framework::Camera& c) const
 {
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glm::mat4 MVP = c.projection() * c.view();
+	glUniformMatrix4fv(mvp, 1, GL_FALSE, glm::value_ptr(MVP));
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	glPolygonMode( GL_FRONT, GL_LINE );
 	glPolygonMode( GL_BACK, GL_LINE );
 	//glPolygonMode( GL_FRONT, GL_POINT );
@@ -238,7 +304,7 @@ void IcoSphere::
 disableVertexAttributes() const
 {
 	glDisableVertexAttribArray(0);
-	//glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(1);
 	//glDisableVertexAttribArray(2);
 }
 

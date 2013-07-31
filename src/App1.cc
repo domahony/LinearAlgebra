@@ -15,7 +15,6 @@
 #include "IcoSphere.h"
 
 
-
 namespace domahony {
 namespace applications {
 
@@ -65,6 +64,9 @@ _init()
 	program.link();
 
 	mvp = glGetUniformLocation(program, "MVP");
+	view = glGetUniformLocation(program, "VIEW");
+	eye = glGetUniformLocation(program, "eye");
+
 
 	//objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
 	//objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
@@ -122,6 +124,12 @@ _display(const domahony::framework::Camera& c)
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glUseProgram(program);
+
+	glm::mat4 viewMatrix = c.view();
+	glUniformMatrix3fv(view, 1, GL_FALSE, &viewMatrix[0][0]);
+
+	glm::vec3 location = c.location();
+	glUniform3fv(eye, 1, &location[0]);
 
 	for (boost::ptr_vector<Drawable>::iterator it = objects.begin(); it != objects.end(); ++it) {
 		it->draw(c);

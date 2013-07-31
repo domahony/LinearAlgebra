@@ -16,7 +16,7 @@ namespace opengl {
 
 class Sphere: public domahony::applications::Drawable {
 public:
-	Sphere(const glm::mat4&, const GLint& mvp);
+	Sphere(const GLint& mvp);
 	virtual ~Sphere();
 
 protected:

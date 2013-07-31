@@ -54,7 +54,7 @@ static std::vector<GLfloat> data() {
 }
 
 Cube::Cube(const glm::mat4& location, const GLint& mvp) :
-		domahony::applications::Drawable(data(), location, mvp), idx(GL_ELEMENT_ARRAY_BUFFER)
+		domahony::applications::Drawable(data(), mvp), idx(GL_ELEMENT_ARRAY_BUFFER)
 {
 
 	std::vector<GLushort> idx_data;

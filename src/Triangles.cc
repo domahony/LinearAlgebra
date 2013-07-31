@@ -31,7 +31,7 @@ data()
 
 Triangles::
 Triangles(const glm::mat4& location, const GLint& mvp):
-			domahony::applications::Drawable(data(), location, mvp)
+			domahony::applications::Drawable(data(), mvp)
 {
 
 }

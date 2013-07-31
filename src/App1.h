@@ -44,6 +44,8 @@ private:
 	GLuint vao;
 	domahony::opengl::Program program;
 	GLint mvp;
+	GLint view;
+	GLint eye;
 	GLint model;
 	boost::ptr_vector<Drawable> objects;
 	int width;

@@ -13,8 +13,8 @@ namespace domahony {
 namespace applications {
 
 Drawable::
-Drawable(const std::vector<GLfloat>& data, const glm::mat4& location, const GLint& mvp) :
-vbo(), location(location), mvp(mvp)
+Drawable(const std::vector<GLfloat>& data, const GLint& mvp) :
+vbo(), mvp(mvp)
 {
 	vbo.buffer_data(data);
 }
@@ -23,13 +23,10 @@ vbo(), location(location), mvp(mvp)
 void
 Drawable::draw(const domahony::framework::Camera& c)
 {
-	glm::mat4 MVP = c.projection() * c.view() * location;
-	glUniformMatrix4fv(mvp, 1, GL_FALSE, &MVP[0][0]);
-
 	vbo.bind();
 
 	enableVertexAttributes();
-	doDraw();
+	doDraw(c);
 
 	disableVertexAttributes();
 

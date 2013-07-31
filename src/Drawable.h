@@ -17,19 +17,18 @@ namespace applications {
 
 class Drawable {
 public:
-	Drawable(const std::vector<GLfloat>& data, const glm::mat4& location, const GLint& mvp);
+	Drawable(const std::vector<GLfloat>& data, const GLint& mvp);
 	void draw(const domahony::framework::Camera&);
 
 	virtual ~Drawable() {}
 
 protected:
 	virtual void enableVertexAttributes() const = 0;
-	virtual void doDraw() const = 0;
+	virtual void doDraw(const domahony::framework::Camera&) const = 0;
 	virtual void disableVertexAttributes() const = 0;
+	const GLint mvp;
 
 private:
-	const GLint mvp;
-	glm::mat4 location;
 	domahony::opengl::VBO vbo;
 
 };

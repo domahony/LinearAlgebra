@@ -113,7 +113,7 @@ data(int &nverts)
 }
 
 Sphere::
-Sphere(const glm::mat4& location, const GLint& mvp) : domahony::applications::Drawable(data(nverts), location, mvp),
+Sphere(const GLint& mvp) : domahony::applications::Drawable(data(nverts), mvp),
 idx(GL_ELEMENT_ARRAY_BUFFER)
 {
 	/*
