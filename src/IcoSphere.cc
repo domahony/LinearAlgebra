@@ -171,7 +171,7 @@ data(int& nverts)
 
 	std::map<edge_key, int> m;
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		std::vector<triangle_idx> triangles2;
 		for (std::vector<triangle_idx>::iterator iter = triangles.begin(); iter != triangles.end(); iter++) {
 
@@ -290,7 +290,7 @@ doDraw(const domahony::framework::Camera& c) const
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glPolygonMode( GL_FRONT, GL_LINE );
+	glPolygonMode( GL_FRONT, GL_FILL );
 	glPolygonMode( GL_BACK, GL_LINE );
 	//glPolygonMode( GL_FRONT, GL_POINT );
 	//glPolygonMode( GL_BACK, GL_FILL );

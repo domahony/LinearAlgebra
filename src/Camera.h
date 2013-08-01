@@ -18,7 +18,7 @@ class Camera {
 public:
 	Camera() :
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
-		m_location(glm::vec3(0,0,3)),
+		m_location(glm::vec3(0,0,5)),
 		m_view(glm::lookAt(
 				m_location,
 				glm::vec3(0,0,0),
