@@ -15,7 +15,7 @@ namespace framework {
 
 class Light {
 public:
-	Light(const glm::vec3& direction, const glm::vec3& color) : direction(direction), color(color)
+	Light(const glm::vec3& direction, const glm::vec3& color, const float& global) : direction(direction), color(color), global(global)
 	{
 
 	}
@@ -29,6 +29,10 @@ public:
 
 	glm::vec3 get_color() const {
 		return color;
+	}
+
+	float get_global() const {
+		return global;
 	}
 
 	void up() {
@@ -58,6 +62,7 @@ public:
 private:
 	glm::vec3 direction;
 	glm::vec3 color;
+	float global;
 };
 
 } /* namespace framework */

@@ -60,24 +60,6 @@ struct triangle_idx {
 	int idx[3];
 };
 
-struct xtriangle {
-
-	xtriangle(const std::vector<vec3>& verts, const int& idx0, const int& idx1, const int& idx2)
-	{
-		pt[0] = verts[idx0];
-		pt[1] = verts[idx1];
-		pt[2] = verts[idx2];
-
-		color = vec3(1 , 0,  0);
-
-		normal = triangleNormal(pt[0], pt[1], pt[2]);
-	}
-
-	vec3 pt[3];
-	vec3 color;
-	vec3 normal;
-};
-
 static int 
 get_middle_point(std::map<edge_key, int>& m, 
 	std::vector<vec3>& v, int p1, int p2) 
@@ -120,7 +102,7 @@ find_neighbors(const std::vector<triangle_idx>& tri, const int& idx)
 }
 
 static std::vector<GLfloat>
-data(int& nverts)
+data(int& nverts, const int& reso)
 {
 	std::vector<vec3> verts;
 	/*
@@ -171,7 +153,7 @@ data(int& nverts)
 
 	std::map<edge_key, int> m;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < reso; i++) {
 		std::vector<triangle_idx> triangles2;
 		for (std::vector<triangle_idx>::iterator iter = triangles.begin(); iter != triangles.end(); iter++) {
 
@@ -207,6 +189,16 @@ data(int& nverts)
 			ret.push_back(norm.y);
 			ret.push_back(norm.z);
 
+			if (verts[iter->idx[0]].x > 0) {
+				ret.push_back(1);
+				ret.push_back(0);
+				ret.push_back(0);
+			} else {
+				ret.push_back(0);
+				ret.push_back(1);
+				ret.push_back(0);
+			}
+
 			ret.push_back(verts[iter->idx[1]].x);
 			ret.push_back(verts[iter->idx[1]].y);
 			ret.push_back(verts[iter->idx[1]].z);
@@ -224,6 +216,16 @@ data(int& nverts)
 			ret.push_back(norm.y);
 			ret.push_back(norm.z);
 
+			if (verts[iter->idx[1]].x > 0) {
+				ret.push_back(1);
+				ret.push_back(0);
+				ret.push_back(0);
+			} else {
+				ret.push_back(0);
+				ret.push_back(1);
+				ret.push_back(0);
+			}
+
 			ret.push_back(verts[iter->idx[2]].x);
 			ret.push_back(verts[iter->idx[2]].y);
 			ret.push_back(verts[iter->idx[2]].z);
@@ -240,6 +242,17 @@ data(int& nverts)
 			ret.push_back(norm.x);
 			ret.push_back(norm.y);
 			ret.push_back(norm.z);
+
+			if (verts[iter->idx[2]].x > 0) {
+				ret.push_back(1);
+				ret.push_back(0);
+				ret.push_back(0);
+			} else {
+				ret.push_back(0);
+				ret.push_back(1);
+				ret.push_back(0);
+			}
+
 			/*
 			std::cout << "Normal: "
 					<< norm.x << ", "
@@ -248,7 +261,7 @@ data(int& nverts)
 					<< std::endl;
 			*/
 
-			nverts+=18;
+			nverts+=36;
 	}
 
 
@@ -258,9 +271,9 @@ data(int& nverts)
 }
 
 
-IcoSphere::IcoSphere(const mat4& location, const GLint& mvp) :
-		domahony::applications::Drawable(data(nverts), mvp),
-		idx(GL_ELEMENT_ARRAY_BUFFER), idx_size(0), light(0.866f, 0.5f, 0.0f, 0.0f)
+IcoSphere::IcoSphere(const domahony::opengl::Program& program, const mat4& location, const domahony::framework::Material& m, const int& resolution) :
+		domahony::applications::Drawable(program, data(nverts, resolution), location, m),
+		idx(GL_ELEMENT_ARRAY_BUFFER), idx_size(0), resolution(resolution)
 {
 	// TODO Auto-generated constructor stub
 
@@ -275,21 +288,19 @@ enableVertexAttributes() const
 {
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	//glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(2);
 	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 }
 
 void IcoSphere::
 doDraw(const domahony::framework::Camera& c) const
 {
-	glm::mat4 MVP = c.projection() * c.view();
-	glUniformMatrix4fv(mvp, 1, GL_FALSE, glm::value_ptr(MVP));
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	//glEnable(GL_DEPTH_TEST);
 	glPolygonMode( GL_FRONT, GL_FILL );
 	glPolygonMode( GL_BACK, GL_LINE );
 	//glPolygonMode( GL_FRONT, GL_POINT );

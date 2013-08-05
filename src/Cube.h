@@ -9,6 +9,8 @@
 #define CUBE_H_
 
 #include "Drawable.h"
+#include "Program.h"
+#include "Material.h"
 #include <glm/glm.hpp>
 
 namespace domahony {
@@ -16,12 +18,12 @@ namespace opengl {
 
 class Cube: public domahony::applications::Drawable {
 public:
-	Cube(const glm::mat4& location, const GLint& mvp);
+	Cube(const domahony::opengl::Program&, const glm::mat4&, const domahony::framework::Material&);
 	virtual ~Cube();
 
 protected:
 	virtual void enableVertexAttributes() const;
-	virtual void doDraw() const;
+	virtual void doDraw(const domahony::framework::Camera&) const;
 	virtual void disableVertexAttributes() const;
 
 private:

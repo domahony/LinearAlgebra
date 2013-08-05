@@ -16,7 +16,7 @@ namespace opengl {
 
 class Triangles: public domahony::applications::Drawable {
 public:
-	Triangles(const glm::mat4& location, const GLint& mvp);
+	Triangles(const glm::mat4& location, const std::map<std::string, GLint>& uniform);
 	virtual ~Triangles();
 
 protected:

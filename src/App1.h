@@ -14,6 +14,7 @@
 #include "OpenGL.h"
 #include "Program.h"
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <map>
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,10 +44,8 @@ private:
 	SDL_Surface *surface;
 	GLuint vao;
 	domahony::opengl::Program program;
-	GLint mvp;
-	GLint view;
-	GLint eye;
-	GLint model;
+
+	std::map<std::string, GLint> uniform;
 	boost::ptr_vector<Drawable> objects;
 	int width;
 	int height;

@@ -20,7 +20,7 @@ namespace opengl {
 class Axis: public domahony::applications::Drawable {
 
 public:
-	Axis(const glm::mat4& location, const GLint& mvp);
+	Axis(const glm::mat4& location, const std::map<std::string, GLint>& uniform);
 	virtual ~Axis();
 
 protected:

@@ -13,6 +13,8 @@
 #include "Cube.h"
 #include "Sphere.h"
 #include "IcoSphere.h"
+#include "Material.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 
 namespace domahony {
@@ -63,15 +65,30 @@ _init()
 
 	program.link();
 
-	mvp = glGetUniformLocation(program, "MVP");
-	view = glGetUniformLocation(program, "VIEW");
-	eye = glGetUniformLocation(program, "eye");
-
+	glEnable(GL_DEPTH_TEST);
 
 	//objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
 	//objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
-	objects.push_back(new domahony::opengl::IcoSphere(glm::mat4(1.0f), mvp));
-	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), mvp));
+	glm::mat4 loc1 = glm::translate(glm::mat4(1), glm::vec3(2, 0, -5));
+	glm::mat4 loc2 = glm::translate(glm::mat4(1), glm::vec3(-2, 0, -5));
+	glm::mat4 loc3 = glm::translate(glm::mat4(1), glm::vec3(0, 4, -15));
+	glm::mat4 loc4 = glm::rotate(
+			glm::translate(glm::mat4(1), glm::vec3(0, -4, 2)),
+			static_cast<float>(M_PI/10), glm::vec3(0,0,1));
+
+	domahony::framework::Material m1(glm::vec3(.6), 1);
+	domahony::framework::Material m2(glm::vec3(1), 256);
+	domahony::framework::Material m3(glm::vec3(.8), 10);
+	domahony::framework::Material m4(glm::vec3(0), 10);
+
+	objects.push_back(new domahony::opengl::IcoSphere(program, loc1, m1, 3));
+	objects.push_back(new domahony::opengl::IcoSphere(program, loc2, m2, 3));
+	objects.push_back(new domahony::opengl::IcoSphere(program, loc3, m3, 3));
+	//objects.push_back(new domahony::opengl::IcoSphere(program, loc4, m4, 3));
+
+	objects.push_back(new domahony::opengl::Cube(program, loc4, m2));
+
+	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), uniform));
 
 	glViewport(0, 0, width, height);
 
@@ -89,27 +106,58 @@ key(const SDL_KeyboardEvent& e)
 
 	switch (e.keysym.sym) {
 	case SDLK_UP:
-		camera.up();
+
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().up();
+		} else {
+			camera.up();
+		}
+
 		ret = true;
 		break;
 	case SDLK_DOWN:
-		camera.down();
+
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().down();
+		} else {
+			camera.down();
+		}
+
 		ret = true;
 		break;
 	case SDLK_LEFT:
-		camera.left();
+
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().left();
+		} else {
+			camera.left();
+		}
+
 		ret = true;
 		break;
 	case SDLK_RIGHT:
-		camera.right();
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().right();
+		} else {
+			camera.right();
+		}
 		ret = true;
 		break;
 	case SDLK_i:
-		camera.in();
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().in();
+		} else {
+			camera.in();
+		}
 		ret = true;
 		break;
 	case SDLK_o:
-		camera.out();
+
+		if (e.keysym.mod & KMOD_SHIFT) {
+			camera.get_light().out();
+		} else {
+			camera.out();
+		}
 		ret = true;
 		break;
 	}
@@ -121,15 +169,18 @@ int App1::
 _display(const domahony::framework::Camera& c)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(program);
 
 	glm::mat4 viewMatrix = c.view();
-	glUniformMatrix3fv(view, 1, GL_FALSE, &viewMatrix[0][0]);
+	glUniformMatrix3fv(uniform["VIEW"], 1, GL_FALSE, &viewMatrix[0][0]);
 
 	glm::vec3 location = c.location();
-	glUniform3fv(eye, 1, &location[0]);
+	glUniform3fv(uniform["EYE"], 1, &location[0]);
+
+	float gloss = 10;
+	glUniform1f(uniform["GLOSS"], gloss);
 
 	for (boost::ptr_vector<Drawable>::iterator it = objects.begin(); it != objects.end(); ++it) {
 		it->draw(c);

@@ -30,8 +30,8 @@ data()
 }
 
 Triangles::
-Triangles(const glm::mat4& location, const GLint& mvp):
-			domahony::applications::Drawable(data(), mvp)
+Triangles(const glm::mat4& location, const std::map<std::string, GLint>& uniform):
+			domahony::applications::Drawable(data(), uniform)
 {
 
 }

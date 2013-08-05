@@ -2,37 +2,43 @@
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
+layout(location = 2) in vec3 mat_color;
 
 uniform mat4 MVP;
 uniform mat3 VIEW;
-uniform vec3 eye;
+uniform vec3 EYE;
 
-uniform int gloss;
-uniform vec3 light;
-uniform vec3 light_color;
+uniform vec3 LIGHT_DIR;
+uniform vec3 LIGHT_COLOR;
+uniform float GLOBAL_LIGHT;
+
+uniform vec3 SPECULAR_COLOR;
+uniform float GLOSS;
 
 smooth out vec4 color;
 
 void main()
 {
-	float g = .1;
-	vec3 l = normalize(VIEW * vec3(0, 0, 1));
-	//vec4 l = normalize(vec4(0, 0, 10, 0));
-	vec4 lc = vec4(1,1,1,0);
-	
+	vec3 l = normalize(VIEW * LIGHT_DIR);
+	vec4 lc = vec4(LIGHT_COLOR,0);
 	
 	vec3 n = normalize(VIEW * normal);
-	vec3 e = normalize(eye);
+	vec3 e = normalize(EYE);
 	
 	vec3 h = (e + l) / length(e+l);	
-	
 	vec3 r = (2 * (max(0, dot(n,l)) * n)) - l;
 	
-	vec4 mat_color = vec4(1,1,0,0);
+	vec4 mat_s_color = vec4(SPECULAR_COLOR,0);
+	vec4 mat_d_color = vec4(mat_color,0);
+	vec4 gc = lc / GLOBAL_LIGHT;
 	
 	gl_Position = MVP * vec4(position, 1);
-	color = (lc * mat_color) * pow(max(0, dot(e, r)), g);
-	//color = (lc * mat_color) * pow(clamp(dot(n, h), 0, 1), g);
-	//color = (lc * mat_color) * pow(max(0, dot(n, h)), g);
-	//color = vec4(n, 1);
+	vec4 s_color = (lc * mat_s_color) * pow(max(0, dot(e, r)), GLOSS);
+	//vec4 s_color = (lc * mat_s_color) * pow(max(0, dot(n, h)), GLOSS);
+	
+	vec4 d_color = (lc * mat_d_color) * max(0, dot(n,l));
+	
+	vec4 a_color = (gc * mat_d_color);	
+	
+	color = s_color + d_color + a_color;
 }

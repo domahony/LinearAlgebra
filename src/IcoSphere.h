@@ -10,13 +10,14 @@
 
 #include <glm/glm.hpp>
 #include "Drawable.h"
+#include "Material.h"
 
 namespace domahony {
 namespace opengl {
 
 class IcoSphere : public domahony::applications::Drawable {
 public:
-	IcoSphere(const glm::mat4&, const GLint& mvp);
+	IcoSphere(const domahony::opengl::Program& program, const glm::mat4&, const domahony::framework::Material& material, const int& resolution);
 	virtual ~IcoSphere();
 
 	static const double phi;
@@ -30,7 +31,8 @@ private:
 	VBO idx;
 	int nverts;
 	int idx_size;
-	glm::vec4 light;
+	int resolution;
+
 };
 
 } /* namespace opengl */

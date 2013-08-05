@@ -12,7 +12,8 @@ namespace domahony {
 namespace sdl {
 
 App::
-App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false)
+App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false),
+camera(domahony::framework::Light(glm::vec3(0,1,0), glm::vec3(1,1,1), 4))
 {
 
 }
