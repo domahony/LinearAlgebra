@@ -36,27 +36,27 @@ public:
 	}
 
 	void up() {
-		direction = glm::vec3(0,10,0);
+		direction += glm::vec3(0,2,0);
 	}
 
 	void down() {
-		direction = glm::vec3(0,-10,0);
+		direction += glm::vec3(0,-2,0);
 	}
 
 	void left() {
-		direction = glm::vec3(-10,0,0);
+		direction += glm::vec3(2,0,0);
 	}
 
 	void right() {
-		direction = glm::vec3(10,0,0);
+		direction += glm::vec3(2,0,0);
 	}
 
 	void in() {
-		direction = glm::vec3(0,0,-10);
+		direction += glm::vec3(0,0,-2);
 	}
 
 	void out() {
-		direction = glm::vec3(0,0,10);
+		direction += glm::vec3(0,0,2);
 	}
 
 private:

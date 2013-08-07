@@ -73,8 +73,8 @@ _init()
 	glm::mat4 loc2 = glm::translate(glm::mat4(1), glm::vec3(-2, 0, -5));
 	glm::mat4 loc3 = glm::translate(glm::mat4(1), glm::vec3(0, 4, -15));
 	glm::mat4 loc4 = glm::rotate(
-			glm::translate(glm::mat4(1), glm::vec3(0, -4, 2)),
-			static_cast<float>(M_PI/10), glm::vec3(0,0,1));
+			glm::translate(glm::mat4(1), glm::vec3(0, 0, 0)),
+			static_cast<float>(M_PI/10), glm::vec3(0,1,1));
 
 	domahony::framework::Material m1(glm::vec3(.6), 1);
 	domahony::framework::Material m2(glm::vec3(1), 256);

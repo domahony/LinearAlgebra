@@ -25,19 +25,26 @@ Drawable(const domahony::opengl::Program& program, const std::vector<GLfloat>& d
 void
 Drawable::draw(const domahony::framework::Camera& c)
 {
+	/*
+	 * draw something at this location
+	 */
 	program.set_eye_location(c.location());
 
 	program.set_light_direction(c.get_light().get_direction());
 	program.set_light_color(c.get_light().get_color());
 	program.set_global_light(c.get_light().get_global());
 
+	/*
 	glm::mat4 mvp = c.projection() * c.view() * location;
-
 	program.set_mvp_matrix(mvp);
+	*/
+	program.set_mvp_matrix(c.projection() * c.view() * location);
 
+	/*
 	glm::mat3 view = glm::mat3(c.view());
-
 	program.set_view_matrix(view);
+	*/
+	program.set_view_matrix(glm::mat3(c.view()));
 
 	program.set_specular_color(material.get_specular_color());
 	program.set_gloss(material.get_gloss());
