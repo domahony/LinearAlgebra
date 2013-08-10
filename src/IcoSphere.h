@@ -24,7 +24,7 @@ public:
 
 protected:
 	virtual void enableVertexAttributes() const;
-	virtual void doDraw(const domahony::framework::Camera&) const;
+	virtual void doDraw(const domahony::framework::Camera&);
 	virtual void disableVertexAttributes() const;
 
 private:

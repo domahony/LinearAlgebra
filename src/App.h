@@ -16,7 +16,7 @@ namespace sdl {
 
 class App {
 public:
-	App();
+	App(const int& width, const int& height);
 
 	void start();
 	int init();

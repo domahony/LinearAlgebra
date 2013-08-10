@@ -296,7 +296,7 @@ enableVertexAttributes() const
 }
 
 void IcoSphere::
-doDraw(const domahony::framework::Camera& c) const
+doDraw(const domahony::framework::Camera& c)
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);

@@ -39,13 +39,13 @@ public:
 
 protected:
 	bool key(const SDL_KeyboardEvent& k);
+	bool resize(const SDL_ResizeEvent& r);
 
 private:
 	SDL_Surface *surface;
 	GLuint vao;
 	domahony::opengl::Program program;
 
-	std::map<std::string, GLint> uniform;
 	boost::ptr_vector<Drawable> objects;
 	int width;
 	int height;

@@ -16,11 +16,11 @@ namespace applications {
 Drawable::
 Drawable(const domahony::opengl::Program& program, const std::vector<GLfloat>& data, const glm::mat4& location,
 		const domahony::framework::Material& m) :
-		program(program), vbo(), location(location), material(m)
+		program(program), vbo(), material(m)
 {
+	this->location.push(location);
 	vbo.buffer_data(data);
 }
-
 
 void
 Drawable::draw(const domahony::framework::Camera& c)
@@ -38,13 +38,14 @@ Drawable::draw(const domahony::framework::Camera& c)
 	glm::mat4 mvp = c.projection() * c.view() * location;
 	program.set_mvp_matrix(mvp);
 	*/
-	program.set_mvp_matrix(c.projection() * c.view() * location);
+
+	program.set_view_matrix(glm::mat3(c.view()));
+	program.set_mvp_matrix(c.projection() * c.view() * location.top());
 
 	/*
 	glm::mat3 view = glm::mat3(c.view());
 	program.set_view_matrix(view);
 	*/
-	program.set_view_matrix(glm::mat3(c.view()));
 
 	program.set_specular_color(material.get_specular_color());
 	program.set_gloss(material.get_gloss());
