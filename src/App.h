@@ -9,7 +9,7 @@
 #define APP_H_
 
 #include <SDL.h>
-#include "Camera.h"
+#include "Context.h"
 
 namespace domahony {
 namespace sdl {
@@ -22,7 +22,7 @@ public:
 	int init();
 
 	int display() {
-		return _display(camera);
+		return _display(context.get_camera());
 	}
 
 protected:
@@ -39,7 +39,7 @@ protected:
 
 	virtual ~App() {}
 
-	domahony::framework::Camera camera;
+	domahony::framework::Context context;
 
 private:
 	int done;

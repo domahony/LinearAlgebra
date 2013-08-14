@@ -102,7 +102,7 @@ resize(const SDL_ResizeEvent& r)
 	height = r.h;
 
 	surface = SDL_SetVideoMode(width, height, surface->format->BitsPerPixel, surface->flags);
-	camera.update_perspective(width, height);
+	context.get_camera().update_perspective(width, height);
 	glViewport(0, 0, width, height);
 
 	return true;
@@ -121,9 +121,9 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_UP:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().up();
+			context.get_camera().get_light().up();
 		} else {
-			camera.up();
+			context.get_camera().up();
 		}
 
 		ret = true;
@@ -131,9 +131,9 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_DOWN:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().down();
+			context.get_camera().get_light().down();
 		} else {
-			camera.down();
+			context.get_camera().down();
 		}
 
 		ret = true;
@@ -141,35 +141,35 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_LEFT:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().left();
+			context.get_camera().get_light().left();
 		} else {
-			camera.left();
+			context.get_camera().left();
 		}
 
 		ret = true;
 		break;
 	case SDLK_RIGHT:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().right();
+			context.get_camera().get_light().right();
 		} else {
-			camera.right();
+			context.get_camera().right();
 		}
 		ret = true;
 		break;
 	case SDLK_i:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().in();
+			context.get_camera().get_light().in();
 		} else {
-			camera.in();
+			context.get_camera().in();
 		}
 		ret = true;
 		break;
 	case SDLK_o:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.get_light().out();
+			context.get_camera().get_light().out();
 		} else {
-			camera.out();
+			context.get_camera().out();
 		}
 		ret = true;
 		break;
