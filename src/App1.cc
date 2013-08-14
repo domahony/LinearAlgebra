@@ -16,6 +16,7 @@
 #include "Material.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+
 namespace domahony {
 namespace applications {
 
@@ -24,7 +25,7 @@ using domahony::opengl::Shader;
 static SDL_Surface*
 init_surface(const int& width, const int&height)
 {
-	SDL_Surface* ret = SDL_SetVideoMode(width, height, 0, SDL_RESIZABLE| SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
+	SDL_Surface* ret = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
 #ifdef _WIN32
 	glewInit();
 #endif
@@ -43,7 +44,6 @@ init_vao()
 
 App1::
 App1(const int& width, const int& height) :
-App(width, height),
 surface(init_surface(width, height)),
 vao(init_vao()),
 objects(),
@@ -86,7 +86,7 @@ _init()
 	objects.push_back(new domahony::opengl::IcoSphere(program, loc3, m3, 3));
 	//objects.push_back(new domahony::opengl::IcoSphere(program, loc4, m4, 3));
 
-	objects.push_back(new domahony::opengl::Cube(program, loc4, m1));
+	objects.push_back(new domahony::opengl::Cube(program, loc4, m2));
 
 	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), uniform));
 
@@ -102,7 +102,7 @@ resize(const SDL_ResizeEvent& r)
 	height = r.h;
 
 	surface = SDL_SetVideoMode(width, height, surface->format->BitsPerPixel, surface->flags);
-	context.get_camera().update_perspective(width, height);
+	camera.update_perspective(width, height);
 	glViewport(0, 0, width, height);
 
 	return true;
@@ -121,9 +121,9 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_UP:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().up();
+			camera.get_light().up();
 		} else {
-			context.get_camera().up();
+			camera.up();
 		}
 
 		ret = true;
@@ -131,9 +131,9 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_DOWN:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().down();
+			camera.get_light().down();
 		} else {
-			context.get_camera().down();
+			camera.down();
 		}
 
 		ret = true;
@@ -141,35 +141,35 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_LEFT:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().left();
+			camera.get_light().left();
 		} else {
-			context.get_camera().left();
+			camera.left();
 		}
 
 		ret = true;
 		break;
 	case SDLK_RIGHT:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().right();
+			camera.get_light().right();
 		} else {
-			context.get_camera().right();
+			camera.right();
 		}
 		ret = true;
 		break;
 	case SDLK_i:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().in();
+			camera.get_light().in();
 		} else {
-			context.get_camera().in();
+			camera.in();
 		}
 		ret = true;
 		break;
 	case SDLK_o:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			context.get_camera().get_light().out();
+			camera.get_light().out();
 		} else {
-			context.get_camera().out();
+			camera.out();
 		}
 		ret = true;
 		break;
@@ -187,9 +187,13 @@ _display(const domahony::framework::Camera& c)
 	glUseProgram(program);
 
 	glm::mat4 viewMatrix = c.view();
+	glUniformMatrix3fv(uniform["VIEW"], 1, GL_FALSE, &viewMatrix[0][0]);
+
 	glm::vec3 location = c.location();
+	glUniform3fv(uniform["EYE"], 1, &location[0]);
 
 	float gloss = 10;
+	glUniform1f(uniform["GLOSS"], gloss);
 
 	for (boost::ptr_vector<Drawable>::iterator it = objects.begin(); it != objects.end(); ++it) {
 		it->draw(c);

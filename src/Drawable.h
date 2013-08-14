@@ -14,7 +14,6 @@
 #include "Material.h"
 #include "Program.h"
 #include <map>
-#include <stack>
 
 namespace domahony {
 namespace applications {
@@ -27,29 +26,16 @@ public:
 
 	virtual ~Drawable() {}
 
-	void push_location(const glm::mat4& l) {
-		location.push(location.top() * l);
-	}
-
-	void pop_location() {
-		location.pop();
-	}
-
-	glm::mat4 get_location() const {
-		return location.top();
-	}
-
 protected:
 	virtual void enableVertexAttributes() const = 0;
-	virtual void doDraw(const domahony::framework::Camera&) = 0;
+	virtual void doDraw(const domahony::framework::Camera&) const = 0;
 	virtual void disableVertexAttributes() const = 0;
-	domahony::opengl::Program program;
 
 private:
+	domahony::opengl::Program program;
 	domahony::opengl::VBO vbo;
 	domahony::framework::Material material;
-
-	std::stack<glm::mat4> location;
+	glm::mat4 location;
 
 };
 

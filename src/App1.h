@@ -46,6 +46,7 @@ private:
 	GLuint vao;
 	domahony::opengl::Program program;
 
+	std::map<std::string, GLint> uniform;
 	boost::ptr_vector<Drawable> objects;
 	int width;
 	int height;

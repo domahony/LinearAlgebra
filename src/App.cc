@@ -12,9 +12,8 @@ namespace domahony {
 namespace sdl {
 
 App::
-App(const int& width, const int& height) : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false),
-context()
-//camera(width, height, domahony::framework::Light(glm::vec3(0,1,0), glm::vec3(1,1,1), 4))
+App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false),
+camera(domahony::framework::Light(glm::vec3(0,1,0), glm::vec3(1,1,1), 4))
 {
 
 }
@@ -84,7 +83,7 @@ start()
 bool App::
 resize(const SDL_ResizeEvent &)
 {
-	return false;
+	return display();
 }
 
 bool App::

@@ -17,8 +17,8 @@ namespace framework {
 
 class Camera {
 public:
-	Camera(const int& width, const int& height, const Light& light) :
-		m_projection(glm::perspective(45.0f, static_cast<float>(width)/height, 0.1f, 100.0f)),
+	Camera(const Light& light) :
+		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
 		m_location(glm::vec3(0,0,5)),
 		m_view(glm::lookAt(
 				m_location,
@@ -27,6 +27,10 @@ public:
 		light(light)
 	{
 
+	}
+
+	void update_perspective(const int& w, const int& h) {
+		m_projection = glm::perspective(45.f, w/static_cast<float>(h), 0.1f, 100.0f);
 	}
 
 	const glm::mat4 view() const {
@@ -47,10 +51,6 @@ public:
 
 	Light get_light() const {
 		return light;
-	}
-
-	void update_perspective(const int& width, const int& height) {
-		m_projection = glm::perspective(45.0f, static_cast<float>(width)/height, 0.1f, 100.0f);
 	}
 
 	void left() {m_location 	+= glm::vec3(-.1, 0, 0); setView();}

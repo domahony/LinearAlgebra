@@ -16,13 +16,13 @@ namespace sdl {
 
 class App {
 public:
-	App(const int& width, const int& height);
+	App();
 
 	void start();
 	int init();
 
 	int display() {
-		return _display(context.get_camera());
+		return _display(camera);
 	}
 
 protected:
@@ -39,7 +39,7 @@ protected:
 
 	virtual ~App() {}
 
-	domahony::framework::Context context;
+	domahony::framework::Camera camera;
 
 private:
 	int done;
