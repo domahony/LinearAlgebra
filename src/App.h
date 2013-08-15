@@ -9,7 +9,7 @@
 #define APP_H_
 
 #include <SDL.h>
-#include "Context.h"
+#include "Camera.h"
 
 namespace domahony {
 namespace sdl {

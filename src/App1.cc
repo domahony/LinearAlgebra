@@ -14,6 +14,7 @@
 #include "Sphere.h"
 #include "IcoSphere.h"
 #include "Material.h"
+#include "ObjShape.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -69,6 +70,7 @@ _init()
 
 	//objects.push_back(new domahony::opengl::Axis(glm::mat4(1.0f), mvp));
 	//objects.push_back(new domahony::opengl::Triangles(glm::mat4(1.0f), mvp));
+
 	glm::mat4 loc1 = glm::translate(glm::mat4(1), glm::vec3(2, 0, -5));
 	glm::mat4 loc2 = glm::translate(glm::mat4(1), glm::vec3(-2, 0, -5));
 	glm::mat4 loc3 = glm::translate(glm::mat4(1), glm::vec3(0, 4, -15));
@@ -80,13 +82,14 @@ _init()
 	domahony::framework::Material m2(glm::vec3(1), 256);
 	domahony::framework::Material m3(glm::vec3(.8), 10);
 	domahony::framework::Material m4(glm::vec3(0), 10);
-
-	objects.push_back(new domahony::opengl::IcoSphere(program, loc1, m1, 3));
-	objects.push_back(new domahony::opengl::IcoSphere(program, loc2, m2, 3));
-	objects.push_back(new domahony::opengl::IcoSphere(program, loc3, m3, 3));
 	//objects.push_back(new domahony::opengl::IcoSphere(program, loc4, m4, 3));
 
-	objects.push_back(new domahony::opengl::Cube(program, loc4, m2));
+	//objects.push_back(new domahony::opengl::IcoSphere(program, loc1, m1, 3));
+	//objects.push_back(new domahony::opengl::IcoSphere(program, loc2, m2, 3));
+	//objects.push_back(new domahony::opengl::IcoSphere(program, loc3, m3, 3));
+
+	//objects.push_back(new domahony::opengl::Cube(program, loc4, m2));
+	objects.push_back(new domahony::opengl::ObjShape(program, loc4, m2));
 
 	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), uniform));
 
