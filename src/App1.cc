@@ -26,7 +26,7 @@ using domahony::opengl::Shader;
 static SDL_Surface*
 init_surface(const int& width, const int&height)
 {
-	SDL_Surface* ret = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
+	SDL_Surface* ret = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_RESIZABLE);
 #ifdef _WIN32
 	glewInit();
 #endif
@@ -109,6 +109,29 @@ resize(const SDL_ResizeEvent& r)
 	glViewport(0, 0, width, height);
 
 	return true;
+}
+
+bool App1::
+button(const SDL_MouseButtonEvent& b)
+{
+
+	if (b.state != SDL_PRESSED) {
+		return false;
+	}
+
+	if (b.button != SDL_BUTTON_LEFT) {
+		return false;
+	}
+
+	std::cout << "x:" << b.x << ", y: " << b.y << std::endl;
+
+	return true;
+}
+
+bool App1::
+motion(const SDL_MouseMotionEvent& m)
+{
+	return false;
 }
 
 bool App1::

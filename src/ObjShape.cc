@@ -32,7 +32,8 @@ using std::istringstream;
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern char redcube[];
+//extern char redcube[];
+extern char fox3[];
 #ifdef __cplusplus
 }
 #endif
@@ -113,14 +114,14 @@ handle_face(std::vector<std::vector<ivec3> >& faces, istringstream& iss)
 }
 
 static std::vector<GLfloat>
-data() 
+data(int& npoints) 
 {
 	std::vector<GLfloat> ret;
 	std::vector<glm::vec4> verts;
 	std::vector<glm::vec4> normals;
 	std::vector<std::vector<ivec3> > faces;
 
-	istringstream iss(redcube);
+	istringstream iss(fox3);
 
 	std::string buf;
 
@@ -209,12 +210,14 @@ data()
 			}
 		}
 
+	npoints = ret.size();
+
 	return ret;
 
 }
 
 ObjShape::ObjShape(const domahony::opengl::Program& p, const glm::mat4& l, const domahony::framework::Material& m) :
-		domahony::applications::Drawable(p, data(), l, m)
+		domahony::applications::Drawable(p, data(npoints), l, m)
 {
 
 }
@@ -238,11 +241,11 @@ void ObjShape::doDraw(const domahony::framework::Camera& c) const {
 	 */
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glPolygonMode( GL_FRONT, GL_FILL);
 	glPolygonMode( GL_BACK, GL_LINE);
-	glDrawArrays(GL_TRIANGLES, 0, 54);
+	glDrawArrays(GL_TRIANGLES, 0, npoints);
 }
 
 void ObjShape::disableVertexAttributes() const {

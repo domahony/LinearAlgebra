@@ -28,6 +28,7 @@ protected:
 
 private:
 	VBO idx;
+	int npoints;
 
 };
 

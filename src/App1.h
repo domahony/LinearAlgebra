@@ -40,6 +40,8 @@ public:
 protected:
 	bool key(const SDL_KeyboardEvent& k);
 	bool resize(const SDL_ResizeEvent& r);
+	bool motion(const SDL_MouseMotionEvent& r);
+	bool button(const SDL_MouseButtonEvent& b);
 
 private:
 	SDL_Surface *surface;

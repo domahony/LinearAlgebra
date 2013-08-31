@@ -30,6 +30,7 @@
 								<option id="gnu.c.compiler.option.include.paths.1497333744" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+									<listOptionValue builtIn="false" value="/usr/local/include/bullet"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.579330966" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="GL_GLEXT_PROTOTYPES=1"/>
@@ -41,6 +42,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1938809560" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+									<listOptionValue builtIn="false" value="/usr/local/include/bullet"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.878007478" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="GL_GLEXT_PROTOTYPES=1"/>
