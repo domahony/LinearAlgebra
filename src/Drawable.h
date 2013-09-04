@@ -14,6 +14,9 @@
 #include "Material.h"
 #include "Program.h"
 #include <map>
+#include <boost/shared_ptr.hpp>
+#include <btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
 
 namespace domahony {
 namespace applications {
@@ -23,6 +26,10 @@ public:
 	Drawable(const domahony::opengl::Program& program, const std::vector<GLfloat>& data, const glm::mat4& location,
 			const domahony::framework::Material& m);
 	void draw(const domahony::framework::Camera&);
+
+	operator btRigidBody* () const {
+		return rigidbody.get();
+	}
 
 	virtual ~Drawable() {}
 
@@ -36,6 +43,9 @@ private:
 	domahony::opengl::VBO vbo;
 	domahony::framework::Material material;
 	glm::mat4 location;
+	boost::shared_ptr<btCollisionShape> collisionShape;
+	boost::shared_ptr<btDefaultMotionState> motionstate;
+	boost::shared_ptr<btRigidBody> rigidbody;
 
 };
 

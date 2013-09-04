@@ -15,6 +15,7 @@
 #include "Program.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <map>
+#include "Physics.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,6 +53,7 @@ private:
 	boost::ptr_vector<Drawable> objects;
 	int width;
 	int height;
+	domahony::physics::Physics physics;
 
 };
 

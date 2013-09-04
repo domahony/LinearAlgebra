@@ -20,6 +20,11 @@ class Physics {
 public:
 
 	Physics();
+
+	void add_body(btRigidBody* body) {
+		dynamicsWorld->addRigidBody(body);
+	}
+
 	virtual ~Physics();
 
 private:

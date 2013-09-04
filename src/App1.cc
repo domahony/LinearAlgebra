@@ -49,10 +49,10 @@ surface(init_surface(width, height)),
 vao(init_vao()),
 objects(),
 width(width),
-height(height)
+height(height),
+physics()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 int App1::
@@ -89,7 +89,11 @@ _init()
 	//objects.push_back(new domahony::opengl::IcoSphere(program, loc3, m3, 3));
 
 	//objects.push_back(new domahony::opengl::Cube(program, loc4, m2));
-	objects.push_back(new domahony::opengl::ObjShape(program, loc4, m2));
+
+	Drawable *d = new domahony::opengl::ObjShape(program, loc4, m2);
+	objects.push_back(d);
+
+	physics.add_body(static_cast<btRigidBody*>(*d));
 
 	//objects.push_back(new domahony::opengl::Cube(glm::mat4(1.0f), uniform));
 
