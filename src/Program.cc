@@ -54,16 +54,32 @@ link()
 		std::cerr << "Linker failure: " << &log[0] << std::endl;
 	}
 
+	glUseProgram(program);
+
+	GLint blah;
+	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &blah);
+
+	std::cerr << "Active Uniforms: '" << blah << "'" << std::endl;
+
+	std::cerr << "'" << Program::MVP.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::VIEW.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::EYE.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::LIGHT_DIR.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::LIGHT_COLOR.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::SPECULAR_COLOR.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::GLOSS.c_str() << "'" << std::endl;
+	std::cerr << "'" << Program::GLOBAL_LIGHT.c_str() << "'" << std::endl;
+
 	uniform[MVP] = glGetUniformLocation(program, Program::MVP.c_str());
-	uniform[VIEW] = glGetUniformLocation(program, VIEW.c_str());
-	uniform[EYE] = glGetUniformLocation(program, EYE.c_str());
+	uniform[VIEW] = glGetUniformLocation(program, Program::VIEW.c_str());
+	uniform[EYE] = glGetUniformLocation(program, Program::EYE.c_str());
 
-	uniform[LIGHT_DIR] = glGetUniformLocation(program, LIGHT_DIR.c_str());
-	uniform[LIGHT_COLOR] = glGetUniformLocation(program, LIGHT_COLOR.c_str());
+	uniform[LIGHT_DIR] = glGetUniformLocation(program, Program::LIGHT_DIR.c_str());
+	uniform[LIGHT_COLOR] = glGetUniformLocation(program, Program::LIGHT_COLOR.c_str());
 
-	uniform[SPECULAR_COLOR] = glGetUniformLocation(program, SPECULAR_COLOR.c_str());
-	uniform[GLOSS] = glGetUniformLocation(program, GLOSS.c_str());
-	uniform[GLOBAL_LIGHT] = glGetUniformLocation(program, GLOBAL_LIGHT.c_str());
+	uniform[SPECULAR_COLOR] = glGetUniformLocation(program, Program::SPECULAR_COLOR.c_str());
+	uniform[GLOSS] = glGetUniformLocation(program, Program::GLOSS.c_str());
+	uniform[GLOBAL_LIGHT] = glGetUniformLocation(program, Program::GLOBAL_LIGHT.c_str());
 }
 
 Program::~Program() {

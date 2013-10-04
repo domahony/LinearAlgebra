@@ -64,6 +64,7 @@ Drawable(const domahony::opengl::Program& program, const std::vector<GLfloat>& d
 	btRigidBody::btRigidBodyConstructionInfo rbCI(0, motionstate.get(), collisionShape.get(), btVector3(0,0,0));
 
 	rigidbody = boost::shared_ptr<btRigidBody>(new btRigidBody(rbCI));
+
 }
 
 

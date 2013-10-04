@@ -9,6 +9,7 @@
 #define VBO_H_
 
 #include <vector>
+#include <iostream>
 #include "OpenGL.h"
 
 namespace domahony {
@@ -27,6 +28,13 @@ public:
 		glBindBuffer(type, vbo);
 	}
 
+	void unbind() const {
+		glBindBuffer(type, 0);
+	}
+
+	int size() const {
+		return buffer_size;
+	}
 
 	template<typename T>
 	int buffer_data(const std::vector<T>& data);
@@ -34,6 +42,7 @@ public:
 private:
 	GLenum type;
 	GLuint vbo;
+	int buffer_size;
 };
 
 } /* namespace opengl */

@@ -10,21 +10,19 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Light.h"
 
 namespace domahony {
 namespace framework {
 
 class Camera {
 public:
-	Camera(const Light& light) :
+	Camera() :
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
-		m_location(glm::vec3(0,0,5)),
+		m_location(glm::vec3(0,0,10)),
 		m_view(glm::lookAt(
 				m_location,
 				glm::vec3(0,0,0),
-				glm::vec3(0,1,0))),
-		light(light)
+				glm::vec3(0,1,0)))
 	{
 
 	}
@@ -45,14 +43,6 @@ public:
 		return m_location;
 	}
 
-	Light& get_light() {
-		return light;
-	}
-
-	Light get_light() const {
-		return light;
-	}
-
 	void left() {m_location 	+= glm::vec3(-.1, 0, 0); setView();}
 	void right() {m_location 	+= glm::vec3(.1, 0, 0); setView();}
 
@@ -71,7 +61,6 @@ private:
 	glm::mat4 m_projection;
 	glm::vec3 m_location;
 	glm::mat4 m_view;
-	Light light;
 
 };
 

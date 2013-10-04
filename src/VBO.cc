@@ -19,7 +19,7 @@ generate_vbo()
 	return ret;
 }
 
-VBO::VBO(const GLenum& type) : type(type), vbo(generate_vbo()){
+VBO::VBO(const GLenum& type) : type(type), vbo(generate_vbo()), buffer_size(0){
 }
 
 VBO::~VBO() {
@@ -34,6 +34,8 @@ buffer_data(const std::vector<T>& data)
 	glBindBuffer(type, vbo);
 	glBufferData(type, data.size() * sizeof(T), &data[0], GL_STATIC_DRAW);
 	glBindBuffer(type, 0);
+
+	buffer_size = data.size();
 
 	return 1;
 }

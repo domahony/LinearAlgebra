@@ -5,15 +5,16 @@
  *      Author: domahony
  */
 
+#include <iostream>
 #include <SDL.h>
+#include <ctime>
 #include "App.h"
 
 namespace domahony {
 namespace sdl {
 
 App::
-App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false),
-camera(domahony::framework::Light(glm::vec3(0,1,0), glm::vec3(1,1,1), 4))
+App() : initialized(SDL_Init(SDL_INIT_EVERYTHING)), done(false)
 {
 
 }
@@ -21,7 +22,7 @@ camera(domahony::framework::Light(glm::vec3(0,1,0), glm::vec3(1,1,1), 4))
 int App::
 init()
 {
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	return _init();
 }
 
@@ -33,67 +34,71 @@ start()
 
 	SDL_Event event;
 
+	double control_rate = 1/static_cast<double>(120);
+	double tick_rate = 0;
+
+	clock_t last_tick = clock();
+	double frame_time = 0;
+
 	while (!done) {
 
-		SDL_WaitEvent(&event);
-		do {
+		clock_t cur_tick = clock();
 
-			bool ret = false;
+		double delta = static_cast<double>((cur_tick - last_tick)) / CLOCKS_PER_SEC;
+
+		frame_time += delta;
+		last_tick = cur_tick;
+
+		if (frame_time < control_rate) {
+			continue;
+		}
+
+		std::cout.precision(5);
+
+		frame_time -= control_rate;
+		//std::cout << "DIFF: " << std::fixed << frame_time << std::endl;
+		//std::cout << "Control time: " << std::fixed << control_rate << std::endl;
+		bool doDisplay = false;
+
+		while (SDL_PollEvent(&event)) {
 
 			switch (event.type) {
-			case SDL_ACTIVEEVENT:
-				ret = activate(event.active);
+			case SDL_WINDOWEVENT:
+				doDisplay = window(event.window);
 				break;
 			case SDL_KEYUP:
-				ret = key(event.key);
+				doDisplay = key(event.key);
 				break;
 			case SDL_KEYDOWN:
-				ret = key(event.key);
+				doDisplay = key(event.key);
 				break;
 			case SDL_MOUSEMOTION:
-				ret = motion(event.motion);
+				doDisplay = motion(event.motion);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				ret = button(event.button);
+				doDisplay = button(event.button);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				ret = button(event.button);
-				break;
-			case SDL_VIDEORESIZE:
-				ret = resize(event.resize);
-				break;
-			case SDL_VIDEOEXPOSE:
-				ret = expose(event.expose);
+				doDisplay = button(event.button);
 				break;
 			case SDL_QUIT:
-				ret = quit(event.quit);
+				doDisplay = quit(event.quit);
 				break;
 			}
 
-			if (ret) {
-				display();
-			}
+		}
 
-		} while (SDL_PollEvent(&event));
+		if (tick() || doDisplay) {
+			_display();
+		}
+
 	}
 
 	SDL_Quit();
 }
 
 bool App::
-resize(const SDL_ResizeEvent &)
-{
-	return display();
-}
-
-bool App::
-expose(const SDL_ExposeEvent &)
-{
-	return false;
-}
-
-bool App::
-activate(const SDL_ActiveEvent &)
+window(const SDL_WindowEvent &)
 {
 	return false;
 }

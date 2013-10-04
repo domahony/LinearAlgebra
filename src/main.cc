@@ -1,14 +1,14 @@
 #include <SDL.h>
 #include "App.h"
-#include "App1.h"
+#include "App2.h"
 
 int
 main(int argc, char **argv)
 {
-	domahony::applications::App1 t(640,480);
-	domahony::sdl::App& a = t;
+	domahony::applications::App2 t(640, 480);
+	//domahony::sdl::App& a = t;
 
-	a.start();
+	t.start();
 
 	return 1;
 }
