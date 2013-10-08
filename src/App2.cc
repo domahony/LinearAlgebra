@@ -22,6 +22,7 @@ extern char pyramid[];
 extern char die2[];
 extern char fragment[];
 extern char vertex[];
+extern char groundplane[];
 #ifdef __cplusplus
 }
 #endif
@@ -32,18 +33,8 @@ using domahony::opengl::Program;
 namespace domahony {
 namespace applications {
 
-static GLuint
-init_vao()
-{
-	GLuint ret;
-	glGenVertexArrays(1, &ret);
-	glBindVertexArray(ret);
-
-	return ret;
-}
-
-App2::App2(const int& width, const int& height) : App(), display(width, height), vao(init_vao()), physics(),
-		light(glm::vec3(0,0,5), glm::vec3(1,1,1), 100), active(0)
+App2::App2(const int& width, const int& height) : App(), display(width, height), physics(),
+		light(glm::vec3(0,10,5), glm::vec3(1,1,1), 100), active(0)
 {
 	// TODO Auto-generated constructor stub
 
@@ -66,20 +57,25 @@ _init()
 	//domahony::opengl::ObjParser::get_data(die2, data);
 	data = domahony::framework::IcoSphereData::get_data();
 
+	std::vector<GLfloat> groundplane_data;
+	domahony::opengl::ObjParser::get_data(groundplane, groundplane_data);
+
 	std::cout << "Size: " << data.size() << std::endl;
+	std::cout << "Size: " << groundplane_data.size() << std::endl;
 
 	domahony::framework::Material m1(glm::vec3(.6), 1);
 
-	boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, data, m1));
+	//boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, data, m1));
+	boost::shared_ptr<AppObject> plane(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, groundplane_data, m1));
 	boost::shared_ptr<AppObject> obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 10)), program, data, m1));
 
-	physics.add_body(*obj);
+	physics.add_body(*plane);
+	//physics.add_body(*obj);
 	physics.add_body(*obj2);
 
-	glBindVertexArray(vao);
-	object.push_back(obj);
+	object.push_back(plane);
+	//object.push_back(obj);
 	object.push_back(obj2);
-	glBindVertexArray(0);
 
 	return 1;
 }
@@ -318,12 +314,9 @@ _display()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-	glBindVertexArray(vao);
-	//obj->draw(camera, light);
 	for (std::vector<boost::shared_ptr<AppObject> >::iterator iter=object.begin(); iter!=object.end(); iter++) {
 		(*iter)->draw(camera, light);
 	}
-	glBindVertexArray(0);
 
 	SDL_GL_SwapWindow(display.get_window());
 

@@ -39,7 +39,6 @@ protected:
 private:
 	domahony::display::Display display;
 	domahony::physics::Physics physics;
-	GLuint vao;
 	domahony::framework::Camera camera;
 	domahony::framework::Light light;
 	std::vector<boost::shared_ptr<AppObject> > object;

@@ -25,6 +25,15 @@ using	domahony::opengl::VBO;
 using	domahony::framework::Material;
 using	domahony::physics::Body;
 
+static GLuint
+init_vao()
+{
+	GLuint ret;
+	glGenVertexArrays(1, &ret);
+
+	return ret;
+}
+
 class AppObject {
 
 public:
@@ -32,24 +41,30 @@ public:
 		program(program),
 		vbo(),
 		material(material),
-		body(this, location, 1., 1.)
+		body(this, location, 1., 1.),
+		vao(init_vao())
 	{
-		//glUseProgram(program);
+		glBindVertexArray(vao);
 		vbo.buffer_data(data);
 
 		vbo.bind();
+		/*
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
+		*/
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
+		glVertexAttribPointer(+ 0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
+		glVertexAttribPointer(+ 1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
+		glVertexAttribPointer(+ 2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
+		/*
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
+		*/
 		vbo.unbind();
+		glBindVertexArray(0);
 	}
 	virtual ~AppObject();
 
@@ -57,7 +72,7 @@ public:
 
 		glUseProgram(program);
 
-		vbo.bind();
+		glBindVertexArray(vao);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
@@ -93,7 +108,7 @@ public:
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
-		vbo.unbind();
+		glBindVertexArray(0);
 	}
 
 	operator domahony::physics::Body& () {
@@ -134,6 +149,7 @@ private:
 	domahony::opengl::VBO vbo;
 	domahony::framework::Material material;
 	domahony::physics::Body body;
+	int vao;
 
 };
 
