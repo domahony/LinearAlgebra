@@ -48,21 +48,11 @@ public:
 		vbo.buffer_data(data);
 
 		vbo.bind();
-		/*
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-		*/
 
 		glVertexAttribPointer(+ 0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), 0);
 		glVertexAttribPointer(+ 1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(3 * sizeof(GLfloat)));
 		glVertexAttribPointer(+ 2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(GLfloat), reinterpret_cast<void*>(6 * sizeof(GLfloat)));
 
-		/*
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		*/
 		vbo.unbind();
 		glBindVertexArray(0);
 	}
@@ -84,9 +74,6 @@ public:
 		program.set_global_light(l.get_global());
 
 		program.set_mvp_matrix(c.projection() * c.view() * body.get_location());
-
-		//program.set_mvp_matrix(c.projection() * c.view());
-
 		program.set_view_matrix(glm::mat3(c.view()));
 
 		program.set_specular_color(material.get_specular_color());
@@ -97,10 +84,6 @@ public:
 		 * location = location * local_location
 		 *	draw(location)
 		 */
-		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
 		glPolygonMode( GL_FRONT, GL_FILL);
 		glPolygonMode( GL_BACK, GL_LINE);
 		glDrawArrays(GL_TRIANGLES, 0, vbo.size()/9);

@@ -21,6 +21,7 @@ private:
 
 public:
 	static void get_data(const char*, std::vector<GLfloat>&);
+	static void get_data(const char*, const char*, std::vector<GLfloat>&);
 };
 
 } /* namespace opengl */

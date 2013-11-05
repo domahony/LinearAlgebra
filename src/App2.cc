@@ -23,6 +23,8 @@ extern char die2[];
 extern char fragment[];
 extern char vertex[];
 extern char groundplane[];
+extern char die4[];
+extern char die4_mtl[];
 #ifdef __cplusplus
 }
 #endif
@@ -54,28 +56,43 @@ _init()
 	program.link();
 
 	std::vector<GLfloat> data;
-	//domahony::opengl::ObjParser::get_data(die2, data);
 	data = domahony::framework::IcoSphereData::get_data();
 
 	std::vector<GLfloat> groundplane_data;
 	domahony::opengl::ObjParser::get_data(groundplane, groundplane_data);
+
+	std::vector<GLfloat> die4_data;
+	domahony::opengl::ObjParser::get_data(die4, die4_mtl, die4_data);
 
 	std::cout << "Size: " << data.size() << std::endl;
 	std::cout << "Size: " << groundplane_data.size() << std::endl;
 
 	domahony::framework::Material m1(glm::vec3(.6), 1);
 
-	//boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, data, m1));
 	boost::shared_ptr<AppObject> plane(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, groundplane_data, m1));
 	boost::shared_ptr<AppObject> obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 10)), program, data, m1));
+	boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 5, 0)), program, data, m1));
+	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, -2, 0)), program, die4_data, m1));
 
 	physics.add_body(*plane);
-	//physics.add_body(*obj);
+	physics.add_body(*obj);
 	physics.add_body(*obj2);
+	physics.add_body(*die4_obj);
 
+	object.push_back(die4_obj);
 	object.push_back(plane);
-	//object.push_back(obj);
+	object.push_back(obj);
 	object.push_back(obj2);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth(1.f);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LEQUAL);
+	glDepthRange(0.f, 1.f);
 
 	return 1;
 }
@@ -87,7 +104,7 @@ window(const SDL_WindowEvent& w)
 	switch (w.event) {
 
 	case SDL_WINDOWEVENT_RESIZED :
-		std::cout << "Hello!!" << std::endl;
+		std::cout << "Hello!! " << w.data1 << "," << w.data2 << std::endl;
 		display.resize(w.data1, w.data2);
 		camera.update_perspective(w.data1, w.data2);
 		ret = true;
@@ -311,7 +328,6 @@ key(const SDL_KeyboardEvent& e)
 int App2::
 _display()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	for (std::vector<boost::shared_ptr<AppObject> >::iterator iter=object.begin(); iter!=object.end(); iter++) {

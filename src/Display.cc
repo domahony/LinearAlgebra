@@ -7,6 +7,7 @@
 
 #include <SDL.h>
 #include "Display.h"
+#include "OpenGL.h"
 
 namespace domahony {
 namespace display {
@@ -46,6 +47,12 @@ resize(const int& w, const int& h) {
 	width = w;
 	height = h;
 	SDL_SetWindowSize(window, w, h);
+
+	//SDL_GetWindowPosition(window, &x, &y);
+
+	int v[4];
+	glGetIntegerv(GL_VIEWPORT, v);
+	glViewport(v[0], v[1], w, h);
 
 }
 

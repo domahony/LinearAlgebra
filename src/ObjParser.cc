@@ -6,10 +6,12 @@
  */
 
 #include "ObjParser.h"
+#include "Material.h"
 #include <sstream>
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <map>
 #include <SDL.h>
 #include "OpenGL.h"
 #include <glm/glm.hpp>
@@ -28,6 +30,13 @@ using glm::ivec4;
 using glm::normalize;
 using glm::triangleNormal;
 using std::istringstream;
+
+static std::map<std::string, domahony::framework::Material>
+get_material(const char* mtl)
+{
+	std::map<std::string, domahony::framework::Material> ret;
+	return ret;
+}
 
 static ivec3
 handle_face_buf(const std::string& buf)
@@ -105,11 +114,13 @@ handle_face(std::vector<std::vector<ivec3> >& faces, istringstream& iss)
 }
 
 static void
-data(const char* data, std::vector<GLfloat>& ret)
+data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 {
 	std::vector<glm::vec4> verts;
 	std::vector<glm::vec4> normals;
 	std::vector<std::vector<ivec3> > faces;
+
+	std::map<std::string, domahony::framework::Material> material = get_material(mtl);
 
 	istringstream iss(data);
 
@@ -204,7 +215,13 @@ data(const char* data, std::vector<GLfloat>& ret)
 void ObjParser::
 get_data(const char* buf, std::vector<GLfloat>& ret)
 {
-	data(buf, ret);
+	data(buf, 0, ret);
+}
+
+void ObjParser::
+get_data(const char* buf, const char* mtl, std::vector<GLfloat>& ret)
+{
+	data(buf, mtl, ret);
 }
 
 } /* namespace opengl */

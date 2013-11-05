@@ -8,6 +8,8 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
+#include <glm/glm.hpp>
+
 namespace domahony {
 namespace framework {
 
