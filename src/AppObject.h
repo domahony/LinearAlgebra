@@ -76,6 +76,8 @@ public:
 		program.set_mvp_matrix(c.projection() * c.view() * body.get_location());
 		program.set_view_matrix(glm::mat3(c.view()));
 
+		program.set_normal_matrix(glm::mat3(c.projection() * c.view() * body.get_location()));
+
 		program.set_specular_color(material.get_specular_color());
 		program.set_gloss(material.get_gloss());
 
@@ -104,13 +106,26 @@ public:
 
 	}
 
+	void rotate(const glm::vec3& dir) {
+
+		glm::mat4 l = body.get_location();
+		glm::vec4 rota = body.get_rotation();
+
+		glm::quat q(rota.w, rota.x, rota.y, rota.z);
+		glm::quat q2(glm::rotate(q, 10.f, dir));
+
+		//glm::mat4 t(glm::rotate(glm::mat4(1.), 10.f, dir));
+		body.set_location(l, glm::vec4(q2.x,q2.y,q2.z,q2.w));
+
+	}
+
 	void translate(glm::vec4 delta) {
 
 		glm::mat4 l = body.get_location();
+		glm::vec4 q = body.get_rotation();
 		glm::mat4 t = glm::translate(glm::mat4(1.), glm::vec3(delta));
 
-
-		body.set_location(t*l);
+		body.set_location(t*l, q);
 	}
 
 	glm::mat4 get_location() const {
@@ -119,12 +134,12 @@ public:
 
 	}
 
-	void set_location(glm::vec3 location) {
-		body.set_location(location);
-	}
+	//void set_location(glm::vec3 location) {
+		//body.set_location(location);
+	//}
 
 	void set_location(const glm::mat4& location) {
-		body.set_location(location);
+		body.set_location(location, body.get_rotation());
 	}
 
 private:

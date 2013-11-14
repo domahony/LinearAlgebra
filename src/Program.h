@@ -42,6 +42,10 @@ public:
 		glUniformMatrix3fv(uniform.at(VIEW), 1, GL_FALSE, glm::value_ptr(m));
 	}
 
+	void set_normal_matrix(const glm::mat3& m) const {
+		glUniformMatrix3fv(uniform.at(N_MATRIX), 1, GL_FALSE, glm::value_ptr(m));
+	}
+
 	void set_eye_location(const glm::vec3& dir) const {
 		glUniform3fv(uniform.at(EYE), 1, glm::value_ptr(dir));
 	}
@@ -64,6 +68,7 @@ private:
 	static const std::string MVP;
 	static const std::string VIEW;
 	static const std::string EYE;
+	static const std::string N_MATRIX;
 
 	static const std::string LIGHT_DIR;
 	static const std::string LIGHT_COLOR;

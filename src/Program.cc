@@ -16,6 +16,7 @@ namespace opengl {
 
 const std::string Program::MVP = "MVP";
 const std::string Program::VIEW = "VIEW";
+const std::string Program::N_MATRIX = "N_MATRIX";
 const std::string Program::EYE = "EYE";
 
 const std::string Program::LIGHT_DIR = "LIGHT_DIR";
@@ -73,6 +74,7 @@ link()
 	uniform[MVP] = glGetUniformLocation(program, Program::MVP.c_str());
 	uniform[VIEW] = glGetUniformLocation(program, Program::VIEW.c_str());
 	uniform[EYE] = glGetUniformLocation(program, Program::EYE.c_str());
+	uniform[N_MATRIX] = glGetUniformLocation(program, Program::N_MATRIX.c_str());
 
 	uniform[LIGHT_DIR] = glGetUniformLocation(program, Program::LIGHT_DIR.c_str());
 	uniform[LIGHT_COLOR] = glGetUniformLocation(program, Program::LIGHT_COLOR.c_str());

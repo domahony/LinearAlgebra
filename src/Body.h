@@ -62,7 +62,22 @@ public:
 		return ret;
 	}
 
-	void set_location(const glm::vec3& loc) {
+	glm::vec4 get_rotation() const {
+
+		btTransform t;
+		body.getMotionState()->getWorldTransform(t);
+
+		btQuaternion q = t.getRotation();
+
+		return glm::vec4(
+				q.getX(),
+				q.getY(),
+				q.getZ(),
+				q.getW()
+				);
+	}
+
+	void set_locationx(const glm::vec3& loc) {
 
 		btTransform t;
 		body.getMotionState()->getWorldTransform(t);
@@ -71,9 +86,13 @@ public:
 
 	}
 
-	void set_location(const glm::mat4& loc) {
+	void set_location(const glm::mat4& loc, const glm::vec4& rot=glm::vec4(0,0,0,1)) {
 
 		btTransform t = get_transform(loc);
+		btQuaternion q(rot.x, rot.y, rot.z, rot.w);
+
+		t.setRotation(q);
+
 		body.getMotionState()->setWorldTransform(t);
 		body.setWorldTransform(t);
 	}

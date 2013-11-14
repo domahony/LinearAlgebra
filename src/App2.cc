@@ -35,8 +35,69 @@ using domahony::opengl::Program;
 namespace domahony {
 namespace applications {
 
+
+
+std::ostream& operator<< (std::ostream& os, const glm::vec4& v) {
+
+	os << "("
+	<< v.x << ","
+	<< v.y << ","
+	<< v.z << ","
+	<< v.w <<
+	")";
+
+	return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const glm::mat4& m) {
+
+	os << "("
+	<< m[0] << std::endl
+	<< m[1] << std::endl
+	<< m[2] << std::endl
+	<< m[3]
+	<<  ")";
+
+	return os;
+}
+
+glm::vec3 get_rotationx(const domahony::framework::Camera& camera, const glm::vec4& dir)
+{
+				std::cout << "View: " << camera.view() << std::endl;
+				std::cout << "Projection: " << camera.projection() << std::endl;
+
+				glm::vec4 dir2(glm::inverse(camera.projection() * camera.view()) * dir);
+
+				glm::vec3 rota(glm::normalize(glm::vec3(dir2)));
+
+				return rota;
+}
+
+glm::vec3 get_rotation(const domahony::framework::Camera& camera, const glm::vec4& dir)
+{
+				std::cout << "View: " << camera.view() << std::endl;
+				std::cout << "Projection: " << camera.projection() << std::endl;
+
+				glm::mat4 inverse_projection(glm::inverse(camera.projection()));
+				glm::vec4 v_cam(inverse_projection * dir); v_cam /= v_cam.w;
+
+				glm::mat4 inverse_view(glm::inverse(camera.view()));
+				glm::vec4 v_world(inverse_view * v_cam); v_world /= v_world.w;
+
+				glm::vec3 rota(glm::normalize(glm::vec3(v_world)));
+
+				//return rota;
+
+				glm::vec3 ret(dir);
+				return ret;
+
+
+				//return rota;
+}
+
 App2::App2(const int& width, const int& height) : App(), display(width, height), physics(),
-		light(glm::vec3(0,10,5), glm::vec3(1,1,1), 100), active(0)
+		//light(glm::normalize(glm::vec3(-1,3,15)), glm::vec3(1,1,1), 100), active(0)
+		light(glm::normalize(glm::vec3(-1,0,0)), glm::vec3(1,1,1), 100), active(0)
 {
 	// TODO Auto-generated constructor stub
 
@@ -70,19 +131,26 @@ _init()
 	domahony::framework::Material m1(glm::vec3(.6), 1);
 
 	boost::shared_ptr<AppObject> plane(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, groundplane_data, m1));
-	boost::shared_ptr<AppObject> obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 10)), program, data, m1));
+	//boost::shared_ptr<AppObject> obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 10)), program, data, m1));
 	boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 5, 0)), program, data, m1));
-	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, -2, 0)), program, die4_data, m1));
+	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(2, 5, 0)), program, die4_data, m1));
+	boost::shared_ptr<AppObject> die4_obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 6, 5)), program, die4_data, m1));
+	boost::shared_ptr<AppObject> die4_obj3(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 3)), program, die4_data, m1));
 
 	physics.add_body(*plane);
 	physics.add_body(*obj);
-	physics.add_body(*obj2);
+	//physics.add_body(*obj2);
 	physics.add_body(*die4_obj);
+	physics.add_body(*die4_obj2);
+	physics.add_body(*die4_obj3);
 
 	object.push_back(die4_obj);
+	object.push_back(die4_obj2);
+	object.push_back(die4_obj3);
+
 	object.push_back(plane);
 	object.push_back(obj);
-	object.push_back(obj2);
+	//object.push_back(obj2);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.f);
@@ -123,11 +191,17 @@ button(const SDL_MouseButtonEvent& b)
 	if (b.state != SDL_PRESSED) {
 
 		if (active) {
-			active = 0;
 			return true;
 		}
 
 		return false;
+	}
+
+	if (b.button == SDL_BUTTON_RIGHT) {
+		if (active) {
+			active = 0;
+			return true;
+		}
 	}
 
 	if (b.button != SDL_BUTTON_LEFT) {
@@ -269,7 +343,12 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().up();
 		} else {
-			camera.up();
+
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(0,0,1,1)));
+			} else {
+				camera.up();
+			}
 		}
 
 		ret = true;
@@ -279,7 +358,11 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().down();
 		} else {
-			camera.down();
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(0,0,-1,1)));
+			} else {
+				camera.down();
+			}
 		}
 
 		ret = true;
@@ -289,7 +372,11 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().left();
 		} else {
-			camera.left();
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(0,-1,0,1)));
+			} else {
+				camera.left();
+			}
 		}
 
 		ret = true;
@@ -298,7 +385,11 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().right();
 		} else {
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(0,1,0,1)));
+			} else {
 			camera.right();
+			}
 		}
 		ret = true;
 		break;
@@ -306,7 +397,11 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().in();
 		} else {
-			camera.in();
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(1,0,0,1)));
+			} else {
+				camera.in();
+			}
 		}
 		ret = true;
 		break;
@@ -315,8 +410,12 @@ key(const SDL_KeyboardEvent& e)
 		if (e.keysym.mod & KMOD_SHIFT) {
 			//camera.get_light().out();
 		} else {
-			std::cout << "Out: " << std::endl;
-			camera.out();
+			if (active) {
+				active->rotate(get_rotation(camera, glm::vec4(-1,0,0,1)));
+			} else {
+				std::cout << "Out: " << std::endl;
+				camera.out();
+			}
 		}
 		ret = true;
 		break;

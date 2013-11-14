@@ -6,7 +6,6 @@
  */
 
 #include "ObjParser.h"
-#include "Material.h"
 #include <sstream>
 #include <iostream>
 #include <vector>
@@ -31,10 +30,99 @@ using glm::normalize;
 using glm::triangleNormal;
 using std::istringstream;
 
-static std::map<std::string, domahony::framework::Material>
+struct Material {
+	float Ns;
+	glm::vec3 Ka;
+	glm::vec3 Kd;
+	glm::vec3 Ks;
+	float Ni;
+	float d;
+	short illum;
+};
+
+struct Face {
+	std::string m;
+	std::vector<ivec3> v;
+};
+
+static std::map<std::string, Material>
 get_material(const char* mtl)
 {
-	std::map<std::string, domahony::framework::Material> ret;
+	std::map<std::string, Material> ret;
+
+	if (!mtl) {
+		return ret;
+	}
+
+	istringstream iss(mtl);
+
+	std::string buf;
+	std::string name;
+
+	while (std::getline(iss, buf, '\n')) {
+
+		istringstream iss2(buf);
+		std::string c;
+		iss2 >> std::skipws >> c;
+		std::cout << "'" << c << "'" << std::endl;
+
+		if (!c.compare("newmtl")) {
+
+			if (!iss2.eof()) {
+				iss2 >> std::skipws >> name;
+			}
+
+		} else if (!c.compare("Ns")) {
+
+			if (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].Ns;
+			}
+
+		} else if (!c.compare("Ka")) {
+
+			while (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].Ka.r
+					>> std::skipws >> ret[name].Ka.g
+					>> std::skipws >> ret[name].Ka.b;
+			}
+
+		} else if (!c.compare("Kd")) {
+
+			while (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].Kd.r
+					>> std::skipws >> ret[name].Kd.g
+					>> std::skipws >> ret[name].Kd.b;
+			}
+
+		} else if (!c.compare("Ks")) {
+
+			while (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].Ks.r
+					>> std::skipws >> ret[name].Ks.g
+					>> std::skipws >> ret[name].Ks.b;
+			}
+
+		} else if (!c.compare("Ni")) {
+
+			if (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].Ni;
+			}
+
+		} else if (!c.compare("d")) {
+
+			if (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].d;
+			}
+
+		} else if (!c.compare("illum")) {
+
+			if (!iss2.eof()) {
+				iss2 >> std::skipws >> ret[name].illum;
+			}
+
+		}
+	}
+
 	return ret;
 }
 
@@ -81,10 +169,11 @@ handle_face_buf(const std::string& buf)
 }
 
 static void
-handle_face(std::vector<std::vector<ivec3> >& faces, istringstream& iss)
+handle_face(std::vector<Face>& faces, const std::string& material, istringstream& iss)
 {
 	std::string buf1, buf2, buf3;
-	std::vector<ivec3> face;
+	Face face;
+	face.m = material;
 
 	iss >>
 		std::skipws >> buf1 >>
@@ -95,20 +184,21 @@ handle_face(std::vector<std::vector<ivec3> >& faces, istringstream& iss)
 	ivec3 ibuf2 = handle_face_buf(buf2);
 	ivec3 ibuf3 = handle_face_buf(buf3);
 
-	face.push_back(ibuf1);
-	face.push_back(ibuf2);
-	face.push_back(ibuf3);
+	face.v.push_back(ibuf1);
+	face.v.push_back(ibuf2);
+	face.v.push_back(ibuf3);
 
 	faces.push_back(face);
 
 	if (!iss.eof()) {
-		face = std::vector<ivec3>();
+		face = Face();
+		face.m = material;
 		iss >> std::skipws >> buf1;
 		ibuf1 = handle_face_buf(buf1);
 
-		face.push_back(ibuf2);
-		face.push_back(ibuf1);
-		face.push_back(ibuf3);
+		face.v.push_back(ibuf2);
+		face.v.push_back(ibuf1);
+		face.v.push_back(ibuf3);
 	}
 
 }
@@ -118,13 +208,14 @@ data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 {
 	std::vector<glm::vec4> verts;
 	std::vector<glm::vec4> normals;
-	std::vector<std::vector<ivec3> > faces;
+	std::vector<Face> faces;
 
-	std::map<std::string, domahony::framework::Material> material = get_material(mtl);
+	std::map<std::string, Material> material = get_material(mtl);
 
 	istringstream iss(data);
 
 	std::string buf;
+	std::string mat;
 
 	while (std::getline(iss, buf, '\n')) {
 
@@ -178,23 +269,36 @@ data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 			}
 
 		} else if (!c.compare("f")) {
-			handle_face(faces, iss2);
+			handle_face(faces, mat, iss2);
+		} else if (!c.compare("usemtl")) {
+			iss2 >> std::skipws >> mat;
+			std::cout << "MATERIAL: " << mat << std::endl;
 		}
 
 	}
 
-		for (std::vector<std::vector<ivec3> >::iterator iter = faces.begin(); iter != faces.end(); iter++) {
+	for (std::map<std::string, Material>::iterator iter = material.begin(); iter != material.end(); iter++) {
 
-			for (std::vector<ivec3>::iterator iter2 = iter->begin(); iter2 != iter->end(); iter2++) {
+		std::cout << "First: " << iter->first << std::endl;
+		std::cout << "Second: " << iter->second.Kd.r << std::endl;
+		std::cout << "Second: " << iter->second.Kd.g << std::endl;
+		std::cout << "Second: " << iter->second.Kd.b << std::endl;
+
+	}
+
+		for (std::vector<Face>::iterator iter = faces.begin(); iter != faces.end(); iter++) {
+
+			for (std::vector<ivec3>::iterator iter2 = iter->v.begin(); iter2 != iter->v.end(); iter2++) {
 
 				ret.push_back(verts[(*iter2)[0] - 1].x);
 				ret.push_back(verts[(*iter2)[0] - 1].y);
 				ret.push_back(verts[(*iter2)[0] - 1].z);
 
 				if (!(*iter2)[2]) {
-					ret.push_back(1);
-					ret.push_back(0);
-					ret.push_back(0);
+
+					ret.push_back(material[iter->m].Kd.r);
+					ret.push_back(material[iter->m].Kd.g);
+					ret.push_back(material[iter->m].Kd.b);
 
 				} else {
 
@@ -204,9 +308,9 @@ data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 
 				}
 
-				ret.push_back(1);
-				ret.push_back(0);
-				ret.push_back(0);
+				ret.push_back(material[iter->m].Kd.r);
+				ret.push_back(material[iter->m].Kd.g);
+				ret.push_back(material[iter->m].Kd.b);
 
 			}
 		}

@@ -6,7 +6,7 @@ layout(location = 2) in vec3 mat_color;
 
 uniform vec3 EYE;
 uniform mat4 MVP;
-uniform mat3 VIEW;
+uniform mat3 N_MATRIX;
 
 uniform vec3 LIGHT_DIR;
 uniform vec3 LIGHT_COLOR;
@@ -19,11 +19,16 @@ out vec4 color;
 
 void main()
 {
-	vec3 l = normalize(VIEW * LIGHT_DIR);
+	//vec3 l = normalize(VIEW * LIGHT_DIR);
+	
+	vec3 l = normalize(LIGHT_DIR);
+	vec3 e = normalize(EYE);
+	
 	vec4 lc = vec4(LIGHT_COLOR,0);
 	
-	vec3 n = normalize(VIEW * normal);
-	vec3 e = normalize(EYE);
+	//vec4 n4 = normalize(MVP * vec4(normal, 1));
+	//vec3 n = vec3(n4);
+	vec3 n = normalize(N_MATRIX * normal);
 	
 	vec3 h = (e + l) / length(e+l);	
 	vec3 r = (2 * (max(0, dot(n,l)) * n)) - l;

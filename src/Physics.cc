@@ -43,6 +43,12 @@ Physics::get_click_object(const glm::vec4& start, const glm::vec3& dir) const
 	}
 }
 
+void
+Physics::any_touches()
+{
+
+}
+
 Physics::Physics() :
 			broadphase(new btDbvtBroadphase()),
 			collisionConfiguration(new btDefaultCollisionConfiguration()),
