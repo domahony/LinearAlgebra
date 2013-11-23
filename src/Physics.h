@@ -39,7 +39,7 @@ public:
 		return dynamicsWorld->stepSimulation(delta, 7);
 	}
 
-	void any_touches();
+	bool any_touches();
 
 	void add_body(Body& body) {
 

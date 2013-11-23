@@ -6,11 +6,38 @@
  */
 
 #include "Physics.h"
+#include "AppObject.h"
 #include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
 #include <glm/glm.hpp>
 
 namespace domahony {
 namespace physics {
+
+using domahony::applications::AppObject;
+
+struct Callback : public btCollisionWorld::ContactResultCallback
+{
+
+	virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* wrap0, int partId0, int idx0,
+			const btCollisionObjectWrapper *wrap1, int partId1, int idx1)
+	{
+		std::cout << "Contact!!!" << std::endl;
+		return 0;
+
+
+		AppObject * ao = static_cast<AppObject*>(wrap0->getCollisionObject()->getUserPointer());
+
+		if (!ao->is_active()) {
+			ao->spin();
+		}
+
+		ao = static_cast<AppObject*>(wrap1->getCollisionObject()->getUserPointer());
+		ao->spin();
+
+	}
+
+};
 
 static void callback(btDynamicsWorld* w, btScalar step) {
 
@@ -43,10 +70,25 @@ Physics::get_click_object(const glm::vec4& start, const glm::vec3& dir) const
 	}
 }
 
-void
+bool
 Physics::any_touches()
 {
 
+	btVector3 aabbmin;
+	btVector3 aabbmax;
+
+	Callback cb;
+
+	dynamicsWorld->performDiscreteCollisionDetection();
+
+	btCollisionObjectArray a = dynamicsWorld->getCollisionObjectArray();
+
+	for (int i=0; i < dynamicsWorld->getNumCollisionObjects(); i++) {
+		dynamicsWorld->contactTest(a[i], cb);
+	}
+
+
+	return false;
 }
 
 Physics::Physics() :

@@ -42,7 +42,8 @@ public:
 		vbo(),
 		material(material),
 		body(this, location, 1., 1.),
-		vao(init_vao())
+		vao(init_vao()),
+		active(0)
 	{
 		glBindVertexArray(vao);
 		vbo.buffer_data(data);
@@ -142,12 +143,25 @@ public:
 		body.set_location(location, body.get_rotation());
 	}
 
+	void set_active(bool active) {
+		this->active = active;
+	}
+
+	bool is_active() {
+		return active;
+	}
+
+	void spin() {
+		translate(glm::vec4(1,0,0,0));
+	}
+
 private:
 	domahony::opengl::Program program;
 	domahony::opengl::VBO vbo;
 	domahony::framework::Material material;
 	domahony::physics::Body body;
 	int vao;
+	bool active;
 
 };
 

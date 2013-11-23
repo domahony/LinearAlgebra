@@ -199,6 +199,7 @@ button(const SDL_MouseButtonEvent& b)
 
 	if (b.button == SDL_BUTTON_RIGHT) {
 		if (active) {
+			active->set_active(false);
 			active = 0;
 			return true;
 		}
@@ -276,6 +277,7 @@ button(const SDL_MouseButtonEvent& b)
 
 	if (active) {
 		std::cout << "Yeah!!" << std::endl;
+		active->set_active(true);
 	} else {
 		std::cout << "Boo!!" << std::endl;
 	}
@@ -321,6 +323,10 @@ motion(const SDL_MouseMotionEvent& m)
 		std::cout << world.x << ", " << world.y << ", " << world.z << std::endl;
 
 		active->set_location(glm::translate(glm::mat4(1.0f), glm::vec3(world)));
+
+		if (physics.any_touches()) {
+
+		}
 
 		return true;
 
