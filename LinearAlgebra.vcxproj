@@ -12,18 +12,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cc" />
-    <ClCompile Include="src\App1.cc" />
-    <ClCompile Include="src\Axis.cc" />
+    <ClCompile Include="src\App2.cc" />
+    <ClCompile Include="src\AppObject.cc" />
     <ClCompile Include="src\Camera.cc" />
-    <ClCompile Include="src\Drawable.cc" />
+    <ClCompile Include="src\die4.mtl.cc" />
+    <ClCompile Include="src\die4.obj.cc" />
+    <ClCompile Include="src\Display.cc" />
+    <ClCompile Include="src\fox3.obj.cc" />
     <ClCompile Include="src\fragment.shader.cc" />
+    <ClCompile Include="src\groundplane.obj.cc" />
+    <ClCompile Include="src\IcoSphereData.cc" />
+    <ClCompile Include="src\Light.cc" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\Material.cc" />
+    <ClCompile Include="src\NormalCalculator.cc" />
+    <ClCompile Include="src\ObjParser.cc" />
     <ClCompile Include="src\OpenGL.cc" />
+    <ClCompile Include="src\Physics.cc" />
     <ClCompile Include="src\Program.cc" />
     <ClCompile Include="src\Shader.cc" />
-    <ClCompile Include="src\Sphere.cc" />
-    <ClCompile Include="src\Test.cc" />
-    <ClCompile Include="src\Triangles.cc" />
     <ClCompile Include="src\VBO.cc" />
     <ClCompile Include="src\vertex.shader.cc" />
   </ItemGroup>
@@ -33,11 +40,11 @@
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Drawable.h" />
+    <ClInclude Include="src\IcoSphere.h" />
     <ClInclude Include="src\OpenGL.h" />
     <ClInclude Include="src\Program.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Sphere.h" />
-    <ClInclude Include="src\Test.h" />
     <ClInclude Include="src\Triangles.h" />
     <ClInclude Include="src\VBO.h" />
   </ItemGroup>
@@ -74,8 +81,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\glew-1.9.0\32bit\include;D:\boost_1_53_0;D:\glm-0.9.4.4;D:\SDL-1.2.15\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\SDL-1.2.15\lib\x86;D:\glew-1.9.0\32bit\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\glew-1.9.0\32bit\include;D:\boost_1_53_0;D:\glm-0.9.4.4;D:\bullet-2.82-r2704\src;D:\SDL2-2.0.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\glew-1.9.0\32bit\lib;D:\bullet-2.82-r2704\lib;D:\SDL2-2.0.1\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,10 +90,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDLmain.lib;SDL.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LinearMath_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;SDL2main.lib;SDL2.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
