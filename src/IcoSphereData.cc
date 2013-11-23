@@ -13,6 +13,7 @@
 #include <cmath>
 #include <map>
 #include <iostream>
+#include <array>
 
 namespace domahony {
 namespace framework {
@@ -34,15 +35,18 @@ struct edge_key {
 
 	bool operator< (const edge_key& other) const {
 
-		if (this->pt[0] < other.pt[0]) {
-			return true;
-		}
+		return std::lexicographical_compare(this->pt.begin(), this->pt.end(), other.pt.begin(), other.pt.end());
+		//if (this->pt[0] < other.pt[0]) {
+		//	return true;
+		//}
 
-		return this->pt[1] < other.pt[1];
+		//return this->pt[1] < other.pt[1];
 	}
 
-	int pt[2];
+	std::array<int, 2> pt;
+	//int pt[2];
 };
+
 
 struct comp {
 	bool operator() (const edge_key& l, const edge_key& r) {
@@ -61,7 +65,7 @@ struct triangle_idx {
 };
 
 static int
-get_middle_point(std::map<edge_key, int>& m,
+get_middle_point(std::map<edge_key, int, comp>& m,
 	std::vector<vec3>& v, int p1, int p2)
 {
 	edge_key e(p1, p2);
@@ -151,7 +155,7 @@ data(int& nverts, const int& reso)
 
 	std::vector<GLfloat> ret;
 
-	std::map<edge_key, int> m;
+	std::map<edge_key, int, comp> m;
 
 	for (int i = 0; i < reso; i++) {
 		std::vector<triangle_idx> triangles2;

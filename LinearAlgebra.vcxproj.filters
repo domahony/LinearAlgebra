@@ -33,22 +33,7 @@
     <ClCompile Include="src\Shader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Test.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Triangles.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\VBO.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\App1.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Axis.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Drawable.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\fragment.shader.cc">
@@ -57,7 +42,43 @@
     <ClCompile Include="src\vertex.shader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sphere.cc">
+    <ClCompile Include="src\App2.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IcoSphereData.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ObjParser.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\die4.mtl.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\die4.obj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\groundplane.obj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fox3.obj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Display.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AppObject.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NormalCalculator.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,9 +98,6 @@
     <ClInclude Include="src\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Triangles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IcoSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
