@@ -13,7 +13,7 @@
 #include <cmath>
 #include <map>
 #include <iostream>
-#include <array>
+#include <boost/array.hpp>
 
 namespace domahony {
 namespace framework {
@@ -43,7 +43,8 @@ struct edge_key {
 		//return this->pt[1] < other.pt[1];
 	}
 
-	std::array<int, 2> pt;
+	boost::array<int, 2> pt;
+	//std::array<int, 2> pt;
 	//int pt[2];
 };
 
