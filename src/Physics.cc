@@ -26,18 +26,41 @@ struct Callback : public btCollisionWorld::ContactResultCallback
 
 		AppObject * ao = static_cast<AppObject*>(wrap0->getCollisionObject()->getUserPointer());
 
+		glm::vec3 start;
+		glm::vec3 end;
+
 		if (!ao->is_active()) {
 
-			btVector3 v = cp.getPositionWorldOnA();
-			glm::vec3 dir(v.getX(), v.getY(), v.getZ());
-			ao->spin(dir);
+			btVector3 s = cp.getPositionWorldOnB();
+			btVector3 e = cp.getPositionWorldOnA();
+			end.x = e.getX();
+			end.y = e.getY();
+			end.z = e.getZ();
+
+			start.x = s.getX();
+			start.y = s.getY();
+			start.z = s.getZ();
+
+		} else {
+
+			btVector3 e = cp.getPositionWorldOnB();
+			btVector3 s = cp.getPositionWorldOnA();
+			end.x = e.getX();
+			end.y = e.getY();
+			end.z = e.getZ();
+
+			start.x = s.getX();
+			start.y = s.getY();
+			start.z = s.getZ();
+
+			ao = static_cast<AppObject*>(wrap1->getCollisionObject()->getUserPointer());
+
 		}
 
-		ao = static_cast<AppObject*>(wrap1->getCollisionObject()->getUserPointer());
 
-		btVector3 v = cp.getPositionWorldOnA();
-		glm::vec3 dir(v.getX(), v.getY(), v.getZ());
-		ao->spin(dir);
+		glm::vec3 dir(start - end);
+
+		ao->nudge(glm::normalize(dir), 0.2);
 
 		return 0;
 	}

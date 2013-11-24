@@ -151,8 +151,8 @@ public:
 		return active;
 	}
 
-	void spin(const glm::vec3& dir) {
-		translate(glm::vec4(dir.x,dir.y,dir.z,0));
+	void nudge(const glm::vec3& dir, const float& distance) {
+		translate(glm::vec4(dir.x,dir.y,dir.z,0) * distance);
 	}
 
 private:
