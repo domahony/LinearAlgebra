@@ -57,10 +57,18 @@ struct Callback : public btCollisionWorld::ContactResultCallback
 
 		}
 
-
 		glm::vec3 dir(start - end);
 
-		ao->nudge(glm::normalize(dir), 0.2);
+		std::cout <<
+				dir.x << ","  <<
+				dir.y << ","  <<
+				dir.z <<
+				std::endl;
+
+		if (dir != glm::vec3(0)) {
+			dir = glm::normalize(dir);
+		}
+		ao->nudge(dir, 0.2);
 
 		return 0;
 	}
