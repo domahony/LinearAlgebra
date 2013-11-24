@@ -31,6 +31,10 @@ public:
 		return color;
 	}
 
+	void set_global(const float& g) {
+		global = g;
+	}
+
 	float get_global() const {
 		return global;
 	}

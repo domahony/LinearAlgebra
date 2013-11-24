@@ -151,8 +151,8 @@ public:
 		return active;
 	}
 
-	void spin() {
-		translate(glm::vec4(1,0,0,0));
+	void spin(const glm::vec3& dir) {
+		translate(glm::vec4(dir.x,dir.y,dir.z,0));
 	}
 
 private:

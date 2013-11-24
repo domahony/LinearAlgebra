@@ -97,7 +97,7 @@ glm::vec3 get_rotation(const domahony::framework::Camera& camera, const glm::vec
 
 App2::App2(const int& width, const int& height) : App(), display(width, height), physics(),
 		//light(glm::normalize(glm::vec3(-1,3,15)), glm::vec3(1,1,1), 100), active(0)
-		light(glm::normalize(glm::vec3(-1,0,0)), glm::vec3(1,1,1), 100), active(0)
+		light(glm::normalize(glm::vec3(-1,0,0)), glm::vec3(1,1,1), 0.1), active(0)
 {
 	// TODO Auto-generated constructor stub
 
@@ -344,6 +344,18 @@ key(const SDL_KeyboardEvent& e)
 	}
 
 	switch (e.keysym.sym) {
+	case SDLK_a:
+
+		if (e.keysym.mod & KMOD_SHIFT) {
+			light.set_global(light.get_global() - 0.01);
+		} else {
+			light.set_global(light.get_global() + 0.01);
+		}
+
+		std::cout << "Light: " << light.get_global() << std::endl;
+
+		ret = true;
+		break;
 	case SDLK_UP:
 
 		if (e.keysym.mod & KMOD_SHIFT) {

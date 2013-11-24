@@ -23,19 +23,25 @@ struct Callback : public btCollisionWorld::ContactResultCallback
 			const btCollisionObjectWrapper *wrap1, int partId1, int idx1)
 	{
 		std::cout << "Contact!!!" << std::endl;
-		return 0;
-
 
 		AppObject * ao = static_cast<AppObject*>(wrap0->getCollisionObject()->getUserPointer());
 
 		if (!ao->is_active()) {
-			ao->spin();
+
+			btVector3 v = cp.getPositionWorldOnA();
+			glm::vec3 dir(v.getX(), v.getY(), v.getZ());
+			ao->spin(dir);
 		}
 
 		ao = static_cast<AppObject*>(wrap1->getCollisionObject()->getUserPointer());
-		ao->spin();
 
+		btVector3 v = cp.getPositionWorldOnA();
+		glm::vec3 dir(v.getX(), v.getY(), v.getZ());
+		ao->spin(dir);
+
+		return 0;
 	}
+
 
 };
 

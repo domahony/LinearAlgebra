@@ -43,7 +43,7 @@ void main()
 	
 	vec4 d_color = (lc * mat_d_color) * max(0, dot(n,l));
 	
-	vec4 a_color = (gc * mat_d_color);	
+	vec4 a_color = (GLOBAL_LIGHT * mat_d_color);	
 	
 	color = s_color + d_color + a_color;
 	gl_Position = MVP * vec4(position, 1);
