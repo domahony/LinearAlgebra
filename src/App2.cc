@@ -25,6 +25,7 @@ extern char vertex[];
 extern char groundplane[];
 extern char die4[];
 extern char die4_mtl[];
+extern char NewHead8[];
 #ifdef __cplusplus
 }
 #endif
@@ -125,6 +126,9 @@ _init()
 	std::vector<GLfloat> die4_data;
 	domahony::opengl::ObjParser::get_data(die4, die4_mtl, die4_data);
 
+	std::vector<GLfloat> head_data;
+	domahony::opengl::ObjParser::get_data(NewHead8, head_data);
+
 	std::cout << "Size: " << data.size() << std::endl;
 	std::cout << "Size: " << groundplane_data.size() << std::endl;
 
@@ -136,6 +140,7 @@ _init()
 	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(2, 5, 0)), program, die4_data, m1));
 	boost::shared_ptr<AppObject> die4_obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 6, 5)), program, die4_data, m1));
 	boost::shared_ptr<AppObject> die4_obj3(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 3)), program, die4_data, m1));
+	boost::shared_ptr<AppObject> head(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(1.5, 0.1, 0)), program, head_data, m1));
 
 	physics.add_body(*plane);
 	physics.add_body(*obj);
@@ -143,10 +148,12 @@ _init()
 	physics.add_body(*die4_obj);
 	physics.add_body(*die4_obj2);
 	physics.add_body(*die4_obj3);
+	physics.add_body(*head);
 
 	object.push_back(die4_obj);
 	object.push_back(die4_obj2);
 	object.push_back(die4_obj3);
+	object.push_back(head);
 
 	object.push_back(plane);
 	object.push_back(obj);
