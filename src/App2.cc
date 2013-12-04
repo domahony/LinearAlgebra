@@ -366,7 +366,7 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_UP:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().up();
+			camera.pitch_up();
 		} else {
 
 			if (active) {
@@ -381,7 +381,7 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_DOWN:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().down();
+			camera.pitch_down();
 		} else {
 			if (active) {
 				active->rotate(get_rotation(camera, glm::vec4(0,0,-1,1)));
@@ -395,7 +395,7 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_LEFT:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().left();
+			camera.yaw_left();
 		} else {
 			if (active) {
 				active->rotate(get_rotation(camera, glm::vec4(0,-1,0,1)));
@@ -408,7 +408,7 @@ key(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_RIGHT:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().right();
+			camera.yaw_right();
 		} else {
 			if (active) {
 				active->rotate(get_rotation(camera, glm::vec4(0,1,0,1)));
@@ -420,7 +420,7 @@ key(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_i:
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().in();
+			camera.roll_left();
 		} else {
 			if (active) {
 				active->rotate(get_rotation(camera, glm::vec4(1,0,0,1)));
@@ -433,7 +433,7 @@ key(const SDL_KeyboardEvent& e)
 	case SDLK_o:
 
 		if (e.keysym.mod & KMOD_SHIFT) {
-			//camera.get_light().out();
+			camera.roll_right();
 		} else {
 			if (active) {
 				active->rotate(get_rotation(camera, glm::vec4(-1,0,0,1)));

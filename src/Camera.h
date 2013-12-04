@@ -56,55 +56,87 @@ public:
 	}
 
 	const glm::vec3 location() const {
-		return glm::vec3(glm::vec4(m_location, 0) * glm::inverse(m_view));
+		return glm::vec3(glm::vec4(m_location, 0));// * (m_view));
+	}
+
+	glm::vec3 move(const glm::vec3& v, const float& m) const {
+		// use the rotation quaternion orientation to get the direction to move in
+		return glm::vec3( (view() * glm::vec4(v.x, v.y, v.z, 0)) * 1);
+	}
+
+	glm::vec3 move2(const glm::vec3& v, const float& m) {
+
+		glm::vec3 v2 = glm::mat3(glm::inverse(view())) * v;
+
+		glm::mat4 t = glm::translate(glm::mat4(1.f), v2);
+
+		glm::vec4 n = t * glm::vec4(m_location.x, m_location.y, m_location.z, 1.f);
+
+		m_location = glm::vec3(n);
+		return v;
 	}
 
 	void left() {
-		m_location += glm::vec3(-.1, 0, 0);
+		//m_location += move(glm::vec3(-.1, 0, 0), -1);
+		move2(glm::vec3(-.1, 0, 0), -1);
 	}
 
 	void right() {
-		m_location += glm::vec3(.1, 0, 0);
+		//m_location += move(glm::vec3(.1, 0, 0), 1);
+		move2(glm::vec3(.1, 0, 0), 1);
 	}
 
 	void up() {
-		m_location += glm::vec3(0, .1, 0);
+		//m_location += move(glm::vec3(0,.1, 0), 1);
+		move2(glm::vec3(0,.1, 0), 1);
 	}
 
 	void down() {
-		m_location += glm::vec3(0, -.1, 0);
+		//m_location += move(glm::vec3(0,-.1, 0), -1);
+		move2(glm::vec3(0,-.1, 0), -1);
 	}
 
 	void in() {
-		m_location += glm::vec3(0, 0, -.1);
+		//m_location += move(glm::vec3(0, 0, -.1), -1);
+		move2(glm::vec3(0, 0, -.1), -1);
 	}
 
 	void out() {
-		m_location += glm::vec3(0, 0, .1);
+		//m_location += move(glm::vec3(0, 0, .1), 1);
+		move2(glm::vec3(0, 0, .1), 1);
+	}
+
+
+
+
+	glm::quat spin(const glm::vec3& v, const float& a) const {
+		glm::vec3 axis(glm::mat3(glm::inverse(view())) * v);
+		glm::quat local = glm::angleAxis(a, axis);
+		return local;
 	}
 
 	void yaw_left() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(0, 1, 0), 2.f);
 	}
 
 	void yaw_right() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(0, 1, 0), -2.f);
 	}
 
 	void pitch_up() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(1, 0, 0), 2.f);
 	}
 
 	void pitch_down() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(1, 0, 0), -2.f);
 	}
 
 	void roll_left() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(0, 0, 1), -2.f);
 	}
 
 	void roll_right() {
-
+		m_quaternion = m_quaternion * spin(glm::vec3(0, 0, 1), 2.f);
 	}
 
 private:
