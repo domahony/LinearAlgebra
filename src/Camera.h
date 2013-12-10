@@ -32,6 +32,11 @@ public:
 	{
 	}
 
+	/**
+	 * @brief Updates the projection matrix
+	 * 
+	 * Updates the projection matrix based on changing the width and hieight of the view
+	 * /
 	void update_perspective(const int& w, const int& h) {
 		m_projection = glm::perspective(45.f, w/static_cast<float>(h), 0.1f, 100.0f);
 	}
