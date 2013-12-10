@@ -107,23 +107,26 @@ public:
 
 	}
 
-	void rotate(const glm::vec3& dir) {
+	void rotate(const glm::vec3& dir1) {
+
+		glm::vec3 dir = glm::normalize(dir1);
 
 		glm::mat4 l = body.get_location();
-		glm::vec4 rota = body.get_rotation();
+		glm::quat q = glm::normalize(body.get_rotation());
 
-		glm::quat q(rota.w, rota.x, rota.y, rota.z);
-		glm::quat q2(glm::rotate(q, 10.f, dir));
+		//glm::quat r = q * glm::normalize(glm::angleAxis(10.f, dir));
+		//glm::quat r = glm::rotate(glm::quat(1,0,0,0), 10.f, dir);
+		glm::quat r = glm::angleAxis(90.f, dir) * q;
 
-		//glm::mat4 t(glm::rotate(glm::mat4(1.), 10.f, dir));
-		body.set_location(l, glm::vec4(q2.x,q2.y,q2.z,q2.w));
+		body.set_location(l, glm::slerp(q, r, .1f));
+		//body.set_location(l, body.get_rotation() * r);
 
 	}
 
 	void translate(glm::vec4 delta) {
 
 		glm::mat4 l = body.get_location();
-		glm::vec4 q = body.get_rotation();
+		glm::quat q = body.get_rotation();
 		glm::mat4 t = glm::translate(glm::mat4(1.), glm::vec3(delta));
 
 		body.set_location(t*l, q);

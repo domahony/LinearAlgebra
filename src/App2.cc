@@ -74,7 +74,21 @@ glm::vec3 get_rotationx(const domahony::framework::Camera& camera, const glm::ve
 				return rota;
 }
 
-glm::vec3 get_rotation(const domahony::framework::Camera& camera, const glm::vec4& dir)
+glm::vec3 get_rotation(const domahony::framework::Camera& camera, const glm::vec4& d)
+{
+
+				glm::vec4 dir(d);
+				dir.w = 0;
+
+				glm::mat4 inverse_proj(glm::inverse(camera.projection()));
+				glm::mat4 inverse_view(glm::inverse(camera.view()));
+
+				return glm::vec3(inverse_view * inverse_proj * dir);
+				//return glm::vec3(inverse_proj * inverse_view * dir);
+				//return glm::vec3(camera.view() * dir);
+}
+
+glm::vec3 get_rotationxx(const domahony::framework::Camera& camera, const glm::vec4& dir)
 {
 				std::cout << "View: " << camera.view() << std::endl;
 				std::cout << "Projection: " << camera.projection() << std::endl;
@@ -370,7 +384,7 @@ key(const SDL_KeyboardEvent& e)
 		} else {
 
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,0,1,1)));
+				active->rotate(get_rotation(camera, glm::vec4(0,0,1, 0)));
 			} else {
 				camera.up();
 			}
@@ -384,7 +398,7 @@ key(const SDL_KeyboardEvent& e)
 			camera.pitch_down();
 		} else {
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,0,-1,1)));
+				active->rotate(get_rotation(camera, glm::vec4(0,0,-1, 0)));
 			} else {
 				camera.down();
 			}
@@ -398,7 +412,7 @@ key(const SDL_KeyboardEvent& e)
 			camera.yaw_left();
 		} else {
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,-1,0,1)));
+				active->rotate(get_rotation(camera, glm::vec4(0,-1,0, 0)));
 			} else {
 				camera.left();
 			}
@@ -411,7 +425,7 @@ key(const SDL_KeyboardEvent& e)
 			camera.yaw_right();
 		} else {
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,1,0,1)));
+				active->rotate(get_rotation(camera, glm::vec4(0,1,0, 0)));
 			} else {
 			camera.right();
 			}
@@ -423,7 +437,7 @@ key(const SDL_KeyboardEvent& e)
 			camera.roll_left();
 		} else {
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(1,0,0,1)));
+				active->rotate(get_rotation(camera, glm::vec4(1,0,0, 0)));
 			} else {
 				camera.in();
 			}
@@ -436,7 +450,7 @@ key(const SDL_KeyboardEvent& e)
 			camera.roll_right();
 		} else {
 			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(-1,0,0,1)));
+				active->rotate(get_rotation(camera, glm::vec4(-1,0,0,0)));
 			} else {
 				std::cout << "Out: " << std::endl;
 				camera.out();

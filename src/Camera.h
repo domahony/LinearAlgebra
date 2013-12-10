@@ -48,7 +48,7 @@ public:
 	/**
 	 * @brief Returns the projection matrix.
 	 *
-	 * This matrix converts between camera coordinates to screen coordinates.
+	 * This matrix converts between camera space to screen space.
 	 */
 	const glm::mat4 projection() const {
 		return m_projection;
@@ -60,7 +60,7 @@ public:
 	 * I think this location is in world space.
 	 */
 	const glm::vec3 location() const {
-		return glm::vec3(glm::vec4(m_location, 0));
+		return glm::vec3(glm::inverse(view()) * glm::vec4(m_location, 1));
 	}
 
 

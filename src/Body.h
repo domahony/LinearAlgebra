@@ -62,19 +62,26 @@ public:
 		return ret;
 	}
 
-	glm::vec4 get_rotation() const {
+	glm::quat get_rotation() const {
 
 		btTransform t;
 		body.getMotionState()->getWorldTransform(t);
 
 		btQuaternion q = t.getRotation();
 
+		glm::quat ret(q.getW(), q.getX(), q.getY(), q.getZ());
+		//glm::quat ret = glm::normalize(glm::angleAxis(q.getAngle(), q.getAxis().getX(), q.getAxis().getY(), q.getAxis().getZ()));
+
+		return ret;
+
+		/*
 		return glm::vec4(
 				q.getX(),
 				q.getY(),
 				q.getZ(),
 				q.getW()
 				);
+			*/
 	}
 
 	void set_locationx(const glm::vec3& loc) {
@@ -86,10 +93,19 @@ public:
 
 	}
 
-	void set_location(const glm::mat4& loc, const glm::vec4& rot=glm::vec4(0,0,0,1)) {
+	void set_location(const glm::mat4& loc, const glm::quat& rot=glm::quat(1,0,0,0)) {
 
 		btTransform t = get_transform(loc);
-		btQuaternion q(rot.x, rot.y, rot.z, rot.w);
+		//btQuaternion q(rot.x, rot.y, rot.z, rot.w);
+		//btQuaternion q(rot.x, rot.y, rot.z, rot.w);
+
+		glm::quat rotn(glm::normalize(rot));
+
+		//btScalar angle = glm::angle(rotn);
+		//glm::vec3 axis = glm::axis(rotn);
+		//btQuaternion q(btVector3(axis.x, axis.y, axis.z), angle * (M_PI / 180.f));
+
+		btQuaternion q(rotn.x, rotn.y, rotn.z, rotn.w);
 
 		t.setRotation(q);
 
