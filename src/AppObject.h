@@ -37,11 +37,11 @@ init_vao()
 class AppObject {
 
 public:
-	AppObject(const glm::mat4& location, Program& program, const std::vector<GLfloat>& data, Material& material) :
+	AppObject(const glm::mat4& location, Program& program, const std::vector<GLfloat>& data, Material& material, const float& mass) :
 		program(program),
 		vbo(),
 		material(material),
-		body(this, location, 1., 1.),
+		body(this, location, 1., mass),
 		vao(init_vao()),
 		active(0)
 	{

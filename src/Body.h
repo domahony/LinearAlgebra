@@ -34,7 +34,10 @@ public:
 	{
 
 		body.setUserPointer(ptr);
-		//body.setGravity(btVector3(0,0,0));
+		body.setGravity(btVector3(0,-0.1f,0));
+		btVector3 inertia;
+		collision->calculateLocalInertia(mass, inertia);
+		body.setMassProps(mass, inertia);
 
 	}
 

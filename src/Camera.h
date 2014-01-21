@@ -27,7 +27,7 @@ class Camera {
 public:
 	Camera() :
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
-		m_location(glm::vec3(0,2,6)),
+		m_location(glm::vec3(0,2,14)),
 		m_quaternion(glm::quat_cast(glm::lookAt(m_location, glm::vec3(0,0,0), glm::vec3(0,1,0))))
 	{
 	}

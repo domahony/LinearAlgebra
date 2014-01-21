@@ -148,13 +148,13 @@ _init()
 
 	domahony::framework::Material m1(glm::vec3(.6), 1);
 
-	boost::shared_ptr<AppObject> plane(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, groundplane_data, m1));
+	boost::shared_ptr<AppObject> plane(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 0, 0)), program, groundplane_data, m1, 0));
 	//boost::shared_ptr<AppObject> obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 10)), program, data, m1));
-	boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 5, 0)), program, data, m1));
-	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(2, 5, 0)), program, die4_data, m1));
-	boost::shared_ptr<AppObject> die4_obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 6, 5)), program, die4_data, m1));
-	boost::shared_ptr<AppObject> die4_obj3(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 3)), program, die4_data, m1));
-	boost::shared_ptr<AppObject> head(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(1.5, 0.1, 0)), program, head_data, m1));
+	boost::shared_ptr<AppObject> obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 5, 0)), program, data, m1, 0));
+	boost::shared_ptr<AppObject> die4_obj(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(2, 5, 0)), program, die4_data, m1, 1));
+	boost::shared_ptr<AppObject> die4_obj2(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(0, 6, 5)), program, die4_data, m1, 2));
+	boost::shared_ptr<AppObject> die4_obj3(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(3, 3, 3)), program, die4_data, m1, 3));
+	boost::shared_ptr<AppObject> head(new AppObject(glm::translate(glm::mat4(1.), glm::vec3(1.5, 0.1, 0)), program, head_data, m1, 1));
 
 	physics.add_body(*plane);
 	physics.add_body(*obj);
