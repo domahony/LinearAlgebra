@@ -81,6 +81,9 @@ start()
 			case SDL_MOUSEBUTTONDOWN:
 				doDisplay = button(event.button);
 				break;
+			case SDL_MOUSEWHEEL:
+				doDisplay = wheel(event.wheel);
+				break;
 			case SDL_QUIT:
 				doDisplay = quit(event.quit);
 				break;
@@ -117,6 +120,12 @@ motion(const SDL_MouseMotionEvent &)
 
 bool App::
 button(const SDL_MouseButtonEvent &)
+{
+	return false;
+}
+
+bool App::
+wheel(const SDL_MouseWheelEvent &)
 {
 	return false;
 }

@@ -33,6 +33,7 @@ protected:
 	virtual bool key(const SDL_KeyboardEvent &);
 	virtual bool motion(const SDL_MouseMotionEvent &);
 	virtual bool button(const SDL_MouseButtonEvent &);
+	virtual bool wheel(const SDL_MouseWheelEvent &);
 	virtual bool quit(const SDL_QuitEvent &);
 
 	virtual int _init() = 0;
