@@ -25,12 +25,7 @@ namespace framework {
 
 class Camera {
 public:
-	Camera() :
-		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 100.0f)),
-		m_location(glm::vec3(0,2,14)),
-		m_quaternion(glm::quat_cast(glm::lookAt(m_location, glm::vec3(0,0,0), glm::vec3(0,1,0))))
-	{
-	}
+	Camera();
 
 	/**
 	 * @brief Updates the projection matrix
@@ -38,7 +33,7 @@ public:
 	 * Updates the projection matrix based on changing the width and hieight of the view
 	 */
 	void update_perspective(const int& w, const int& h) {
-		m_projection = glm::perspective(45.f, w/static_cast<float>(h), 0.1f, 100.0f);
+		m_projection = glm::perspective(45.f, w/static_cast<float>(h), 0.01f, 200.0f);
 	}
 
 	/**
@@ -47,7 +42,8 @@ public:
 	 * This matrix converts between world space and camera space.
 	 */
 	const glm::mat4 view() const {
-		return glm::mat4_cast(m_quaternion) * glm::translate(glm::mat4(1), m_location * -1.f);
+		//return glm::mat4_cast(m_quaternion) * glm::translate(glm::mat4(1), m_location * -1.f);
+		return glm::mat4_cast(m_camera_quat) * glm::translate(glm::mat4(1), m_location * -1.f) * glm::mat4_cast(m_quaternion);
 	}
 
 	/**
@@ -65,7 +61,8 @@ public:
 	 * I think this location is in world space.
 	 */
 	const glm::vec3 location() const {
-		return glm::vec3(glm::inverse(view()) * glm::vec4(m_location, 1));
+		//return glm::vec3(glm::inverse(view()) * glm::vec4(-m_location, 0));
+		return m_location;
 	}
 
 
@@ -101,14 +98,22 @@ public:
 	 * Move the camera forward
 	 */
 	void in() {
-		move2(glm::vec3(0, 0, -.1), -1);
+
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(0,0,-1.f);
+		//glm::vec3 dir = glm::conjugate(m_camera_quat) * glm::vec3(0,0,-1) * (m_camera_quat);
+		move2(dir, 1);
 	}
 
 	/**
 	 * Move the camera backward
 	 */
 	void out() {
-		move2(glm::vec3(0, 0, .1), 1);
+
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(0,0,1.f);
+		//glm::vec3 dir = glm::conjugate(m_camera_quat) * glm::vec3(0,0,1) * (m_camera_quat);
+		move2(dir, 1);
 	}
 
 
@@ -116,53 +121,70 @@ public:
 	 * Turn left
 	 */
 	void yaw_left() {
-		m_quaternion = m_quaternion * spin(glm::vec3(0, 1, 0), -2.f);
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(0,1.f,0);
+		m_camera_quat = m_camera_quat * spin2(dir, -2.f);
+		//m_camera_quat = m_camera_quat * spin2(glm::vec3(0, 1, 0), -2.f);
 	}
 
 	/**
 	 * Turn right
 	 */
 	void yaw_right() {
-		m_quaternion = m_quaternion * spin(glm::vec3(0, 1, 0), 2.f);
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(0,1.f,0);
+		m_camera_quat = m_camera_quat * spin2(dir, 2.f);
+		//m_camera_quat = m_camera_quat * spin2(glm::vec3(0, 1, 0), 2.f);
 	}
 
 	/**
 	 * Tilt the camera up
 	 */
 	void pitch_up() {
-		m_quaternion = m_quaternion * spin(glm::vec3(1, 0, 0), -2.f);
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(1.f,0,0);
+		m_camera_quat = m_camera_quat * spin2(dir, -2.f);
+		//m_camera_quat = m_camera_quat * spin2(glm::vec3(1, 0, 0), -2.f);
 	}
 
 	/**
 	 * Tilt the camera down
 	 */
 	void pitch_down() {
-		m_quaternion = m_quaternion * spin(glm::vec3(1, 0, 0), 2.f);
+		glm::mat3 cam = glm::inverse(glm::mat3_cast(m_camera_quat));
+		glm::vec3 dir = cam * glm::vec3(1.f,0,0);
+		m_camera_quat = m_camera_quat * spin2(dir, 2.f);
+		//m_camera_quat = m_camera_quat * spin2(glm::vec3(1, 0, 0), 2.f);
 	}
 
 	/**
 	 * Roll the camera to the left
 	 */
 	void roll_left() {
-		m_quaternion = m_quaternion * spin(glm::vec3(0, 0, 1), 2.f);
+		m_camera_quat = m_camera_quat * spin2(glm::vec3(0, 0, 1), 2.f);
 	}
 
 	/**
 	 * Roll the camera to the right
 	 */
 	void roll_right() {
-		m_quaternion = m_quaternion * spin(glm::vec3(0, 0, 1), -2.f);
+		m_camera_quat = m_camera_quat * spin2(glm::vec3(0, 0, 1), -2.f);
 	}
+
+	void move(const glm::vec3& v, const float& deg);
 
 private:
 
 	void move2(const glm::vec3& v, const float& m) {
 
-		glm::vec3 v2 = glm::normalize(glm::mat3(glm::inverse(view())) * v);
+		//glm::vec3 v2 = glm::normalize(glm::mat3(glm::inverse(view())) * v);
+		glm::vec3 v2 = glm::normalize(v);
 		glm::mat4 t = glm::translate(glm::mat4(1.f), v2);
 		glm::vec4 n = t * glm::vec4(m_location.x, m_location.y, m_location.z, 1.f);
 		m_location = glm::vec3(n);
 	}
+
+	glm::quat spin2(const glm::vec3& v, const float& a) const;
 
 	glm::quat spin(const glm::vec3& v, const float& a) const {
 		glm::vec3 axis(glm::mat3(glm::inverse(view())) * v);
@@ -173,6 +195,7 @@ private:
 	glm::mat4 m_projection;
 	glm::vec3 m_location;
 	glm::quat m_quaternion;
+	glm::quat m_camera_quat;
 
 };
 

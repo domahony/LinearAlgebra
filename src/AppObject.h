@@ -37,13 +37,21 @@ init_vao()
 class AppObject {
 
 public:
-	AppObject(const glm::mat4& location, Program& program, const std::vector<GLfloat>& data, Material& material, const float& mass) :
+	AppObject(const glm::mat4& location, Program& program, const std::vector<GLfloat>& data,
+			Material& material, const float& mass,
+			const float& scale=1,
+			const GLenum& front=GL_FILL,
+			const GLenum& back=GL_LINE) :
 		program(program),
 		vbo(),
 		material(material),
-		body(this, location, 1., mass),
+		body(this, location, scale, mass),
 		vao(init_vao()),
-		active(0)
+		active(0),
+		scale(scale),
+		gl_front_mode(front),
+		gl_back_mode(back),
+		line_width(1)
 	{
 		glBindVertexArray(vao);
 		vbo.buffer_data(data);
@@ -74,7 +82,12 @@ public:
 		program.set_light_color(l.get_color());
 		program.set_global_light(l.get_global());
 
-		program.set_mvp_matrix(c.projection() * c.view() * body.get_location());
+		program.set_mvp_matrix(c.projection()
+				* c.view()
+				* body.get_location()
+				* glm::scale(glm::mat4(1.f), glm::vec3(scale))
+		);
+
 		program.set_view_matrix(glm::mat3(c.view()));
 
 		program.set_normal_matrix(glm::mat3(c.projection() * c.view() * body.get_location()));
@@ -87,8 +100,9 @@ public:
 		 * location = location * local_location
 		 *	draw(location)
 		 */
-		glPolygonMode( GL_FRONT, GL_FILL);
-		glPolygonMode( GL_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT, gl_front_mode);
+		glPolygonMode(GL_BACK, gl_back_mode);
+		glLineWidth(line_width);
 		glDrawArrays(GL_TRIANGLES, 0, vbo.size()/9);
 
 		glDisableVertexAttribArray(0);
@@ -105,6 +119,10 @@ public:
 
 		return body.get_origin();
 
+	}
+
+	float get_scale() const {
+		return scale;
 	}
 
 	void rotate(const glm::vec3& dir1) {
@@ -158,6 +176,22 @@ public:
 		translate(glm::vec4(dir.x,dir.y,dir.z,0) * distance);
 	}
 
+	void set_front_mode(const GLenum& mode) {
+		gl_front_mode = mode;
+	}
+
+	GLenum get_front_mode() const {
+		return gl_front_mode;
+	}
+
+	void set_line_width(const int& width) {
+		line_width = width;
+	}
+
+	int get_line_width() const {
+		return line_width;
+	}
+
 private:
 	domahony::opengl::Program program;
 	domahony::opengl::VBO vbo;
@@ -165,6 +199,10 @@ private:
 	domahony::physics::Body body;
 	int vao;
 	bool active;
+	float scale;
+	GLenum gl_front_mode;
+	GLenum gl_back_mode;
+	int line_width;
 
 };
 

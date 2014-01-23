@@ -13,7 +13,9 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
+#include <vector>
 #include "Body.h"
+#include "AppObject.h"
 
 namespace domahony {
 namespace physics {
@@ -21,6 +23,15 @@ namespace physics {
 class Physics {
 
 public:
+
+	struct ContactInfoItem {
+		glm::vec3 pt;
+		void *ptr;
+	};
+
+	struct ContactInfo {
+		std::vector<ContactInfoItem> items;
+	};
 
 	Physics();
 
@@ -51,6 +62,8 @@ public:
 			//std::cout << "Internal Step: " << step << std::endl;
 			return 1;
 	}
+
+	void get_contact_info(ContactInfo& ci, domahony::applications::AppObject*, const glm::vec3&, const float&) const;
 
 	virtual ~Physics();
 

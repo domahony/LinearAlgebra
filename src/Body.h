@@ -37,7 +37,7 @@ public:
 		body.setGravity(btVector3(0,-0.1f,0));
 		btVector3 inertia;
 		collision->calculateLocalInertia(mass, inertia);
-		body.setMassProps(mass, inertia);
+		//body.setMassProps(mass, inertia);
 
 	}
 

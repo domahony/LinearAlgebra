@@ -35,6 +35,7 @@ protected:
 	bool window(const SDL_WindowEvent& w);
 	bool motion(const SDL_MouseMotionEvent& r);
 	bool button(const SDL_MouseButtonEvent& b);
+	bool wheel(const SDL_MouseWheelEvent& b);
 
 private:
 	domahony::display::Display display;
@@ -43,6 +44,7 @@ private:
 	domahony::framework::Light light;
 	std::vector<boost::shared_ptr<AppObject> > object;
 	AppObject *active;
+	bool middle_active;
 
 };
 
