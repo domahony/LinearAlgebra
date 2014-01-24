@@ -172,9 +172,9 @@ _init()
 	object.push_back(die4_obj3);
 	object.push_back(head);
 
-	object.push_back(plane);
 	object.push_back(obj);
-	//object.push_back(obj2);
+	object.push_back(plane);
+	//object.push_back(obj2);was
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.f);
@@ -183,7 +183,6 @@ _init()
 	glCullFace(GL_BACK);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
-	//glDepthFunc(GL_LEQUAL);
 	glDepthFunc(GL_LESS);
 	glDepthRange(0.f, 1.f);
 	glFrontFace(GL_CCW);
@@ -424,102 +423,63 @@ key(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_UP:
 
-		camera.pitch_up();
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.pitch_up();
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(0,0,1, 0)));
 		} else {
-
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,0,1, 0)));
-			} else {
-				camera.up();
-			}
+			camera.pitch_up();
 		}
-		*/
 
 		ret = true;
 		break;
+
 	case SDLK_DOWN:
 
-		camera.pitch_down();
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.pitch_down();
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(0,0,-1, 0)));
 		} else {
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,0,-1, 0)));
-			} else {
-				camera.down();
-			}
+			camera.pitch_down();
 		}
-		*/
 
 		ret = true;
 		break;
+
 	case SDLK_LEFT:
 
-		camera.yaw_left();
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.yaw_left();
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(0,-1,0, 0)));
 		} else {
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,-1,0, 0)));
-			} else {
-				camera.left();
-			}
+			camera.yaw_left();
 		}
-		*/
 
 		ret = true;
 		break;
+
 	case SDLK_RIGHT:
-		camera.yaw_right();
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.yaw_right();
+
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(0,1,0, 0)));
 		} else {
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(0,1,0, 0)));
-			} else {
-			camera.right();
-			}
+			camera.yaw_right();
 		}
-		*/
 		ret = true;
 		break;
+
 	case SDLK_i:
 
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.roll_left();
-		} else {
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(1,0,0, 0)));
-			} else {
-				camera.in();
-			}
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(1,0,0, 0)));
+			ret = true;
 		}
-		ret = true;
+
 		break;
-		*/
 
 	case SDLK_o:
 
-		/*
-		if (e.keysym.mod & KMOD_SHIFT) {
-			camera.roll_right();
-		} else {
-			if (active) {
-				active->rotate(get_rotation(camera, glm::vec4(-1,0,0,0)));
-			} else {
-				std::cout << "Out: " << std::endl;
-				camera.out();
-			}
+		if (active) {
+			active->rotate(get_rotation(camera, glm::vec4(-1,0,0,0)));
+			ret = true;
 		}
-		*/
-		ret = true;
+
 		break;
 	}
 
@@ -534,6 +494,10 @@ _display()
 	for (std::vector<boost::shared_ptr<AppObject> >::iterator iter=object.begin(); iter!=object.end(); iter++) {
 		(*iter)->draw(camera, light);
 	}
+
+	glFrontFace(GL_CW);
+	object[object.size() - 1]->draw(camera, light);
+	glFrontFace(GL_CCW);
 
 	SDL_GL_SwapWindow(display.get_window());
 
