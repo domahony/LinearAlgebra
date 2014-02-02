@@ -23,6 +23,35 @@ int App::
 init()
 {
 	//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
+	SDL_Joystick *joy;
+
+	// Initialize the joystick subsystem
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
+	// Check for joystick
+	if (SDL_NumJoysticks() > 0) {
+	    // Open joystick
+	    joy = SDL_JoystickOpen(0);
+
+	    if (joy) {
+	        printf("Opened Joystick 0\n");
+	        printf("Name: %s\n", SDL_JoystickNameForIndex(0));
+	        printf("Number of Axes: %d\n", SDL_JoystickNumAxes(joy));
+	        printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(joy));
+	        printf("Number of Balls: %d\n", SDL_JoystickNumBalls(joy));
+	    } else {
+	        printf("Couldn't open Joystick 0\n");
+	    }
+
+	    // Close if opened
+	    //if (SDL_JoystickGetAttached(joy)) {
+	    //   SDL_JoystickClose(joy);
+	    //}
+	}
+
 	return _init();
 }
 
@@ -84,11 +113,24 @@ start()
 			case SDL_MOUSEWHEEL:
 				doDisplay = wheel(event.wheel);
 				break;
+			case SDL_JOYBUTTONDOWN:
+			case SDL_JOYBUTTONUP:
+				doDisplay = joystick(event.jbutton);
+				break;
+			case SDL_JOYAXISMOTION:
+				doDisplay = joystick(event.jaxis);
+				break;
+			case SDL_JOYHATMOTION:
+				doDisplay = joystick(event.jhat);
+				break;
 			case SDL_QUIT:
 				doDisplay = quit(event.quit);
 				break;
 			}
 
+		}
+		if (doDisplay) {
+			std::cout << "Do Display: " << doDisplay << std::endl;
 		}
 
 		if (tick() || doDisplay) {
@@ -98,6 +140,71 @@ start()
 	}
 
 	SDL_Quit();
+}
+
+bool App::
+joystick(const SDL_JoyAxisEvent& e)
+{
+	std::cout << "Axis Value: " << e.value << std::endl;
+
+	return true;
+}
+
+bool App::
+joystick(const SDL_JoyBallEvent& e)
+{
+	std::cout << e.ball << std::endl;
+	return true;
+
+}
+
+bool App::
+joystick(const SDL_JoyButtonEvent& e)
+{
+
+	switch (e.state) {
+	case SDL_PRESSED:
+		std::cout << "Pressed Button Event: " << std::dec << static_cast<int>(e.button) << std::endl;
+		break;
+	case SDL_RELEASED:
+		std::cout << "Released Button Event: " << std::dec << static_cast<int>(e.button) << std::endl;
+		break;
+	}
+
+	return false;
+
+}
+
+bool App::
+joystick(const SDL_JoyDeviceEvent& e)
+{
+	std::cout << e.type << std::endl;
+	return true;
+
+}
+
+bool App::
+joystick(const SDL_JoyHatEvent& e)
+{
+	//std::cout << e.hat << std::endl;
+	if (e.value & SDL_HAT_LEFT) {
+		std::cout << "Hat Left" << std::endl;
+	}
+	if (e.value & SDL_HAT_RIGHT) {
+		std::cout << "Hat Right" << std::endl;
+	}
+	if (e.value & SDL_HAT_UP) {
+		std::cout << "Hat Up" << std::endl;
+	}
+	if (e.value & SDL_HAT_DOWN) {
+		std::cout << "Hat Down" << std::endl;
+	}
+	if (e.value == SDL_HAT_CENTERED) {
+		std::cout << "Hat Center" << std::endl;
+	}
+
+	return true;
+
 }
 
 bool App::

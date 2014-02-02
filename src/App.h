@@ -36,6 +36,12 @@ protected:
 	virtual bool wheel(const SDL_MouseWheelEvent &);
 	virtual bool quit(const SDL_QuitEvent &);
 
+	virtual bool joystick(const SDL_JoyAxisEvent &);
+	virtual bool joystick(const SDL_JoyBallEvent &);
+	virtual bool joystick(const SDL_JoyButtonEvent &);
+	virtual bool joystick(const SDL_JoyDeviceEvent &);
+	virtual bool joystick(const SDL_JoyHatEvent &);
+
 	virtual int _init() = 0;
 	virtual int _display() = 0;
 	virtual int _tick() = 0;
