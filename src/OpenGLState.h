@@ -20,6 +20,14 @@ public:
 	OpenGLState();
 	virtual ~OpenGLState();
 
+	void enable() const {
+		glUseProgram(program);
+	}
+
+	void disable() const {
+		glUseProgram(0);
+	}
+
 	void set_eye_location(const glm::vec3& v) {
 		program.set_eye_location(v);
 	}

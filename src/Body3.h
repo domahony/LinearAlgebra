@@ -19,8 +19,13 @@ namespace domahony {
 class Body3 {
 public:
 	Body3(const glm::mat4& l): location(l), material(glm::vec3(.6), 1.f) {};
+
 	virtual ~Body3() {};
 	virtual void render(const domahony::framework::Camera& c, const domahony::framework::Light& l) const =0;
+
+	void set_location(const glm::mat4& loc) {
+		location = loc;
+	}
 
 	glm::mat4 get_location() const
 	{

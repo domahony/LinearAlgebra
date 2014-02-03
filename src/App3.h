@@ -16,6 +16,7 @@ namespace domahony {
 namespace applications {
 
 class App3: public domahony::sdl::App {
+
 public:
 	App3(const int& width, const int& height, domahony::World& world);
 	virtual ~App3();
@@ -34,6 +35,7 @@ protected:
 private:
 	domahony::display::Display display;
 	domahony::World world;
+	bool middle_active;
 
 };
 

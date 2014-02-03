@@ -48,7 +48,7 @@ OpenGLState() : vao(init_vao()), vbo(),
 
 	program.link();
 
-	glUseProgram(program);
+	//glUseProgram(program);
 
 }
 

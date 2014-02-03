@@ -17,6 +17,18 @@ World::World() : impl(new WorldImpl())
 }
 
 void World::
+move_camera(const glm::vec3& v, const float& d)
+{
+	impl->move_camera(v, d);
+}
+
+void World::
+update_perspective(const int width, const int height)
+{
+	impl->update_perspective(width, height);
+}
+
+void World::
 render()
 {
 	impl->render();

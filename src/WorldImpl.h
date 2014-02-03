@@ -18,8 +18,11 @@ public:
 	WorldImpl();
 	virtual ~WorldImpl();
 
+	void update_perspective(const int width, const int height);
+	void move_camera(const glm::vec3&, const float&);
 	void render();
 	int tick();
+
 
 	void add_body(Body3Ptr);
 

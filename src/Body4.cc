@@ -24,6 +24,7 @@ template<class Creator, class Renderer>
 void Body4<Creator, Renderer>::
 render(const domahony::framework::Camera& c, const domahony::framework::Light& l) const {
 
+	renderer->enable();
 	renderer->set_eye_location(c.location());
 
 	renderer->set_light_direction(l.get_direction());
@@ -44,6 +45,7 @@ render(const domahony::framework::Camera& c, const domahony::framework::Light& l
 	renderer->set_gloss(get_material().get_gloss());
 
 	renderer->render();
+	renderer->disable();
 }
 
 template<class Creator, class Renderer>

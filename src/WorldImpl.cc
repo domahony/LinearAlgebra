@@ -24,6 +24,18 @@ WorldImpl::~WorldImpl() {
 }
 
 void WorldImpl::
+move_camera(const glm::vec3& v, const float& d)
+{
+	camera.move(v, d);
+}
+
+void WorldImpl::
+update_perspective(const int width, const int height)
+{
+	camera.update_perspective(width, height);
+}
+
+void WorldImpl::
 render()
 {
 	cout << "Render" << endl;

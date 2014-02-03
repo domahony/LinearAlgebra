@@ -23,6 +23,8 @@ public:
 	void render();
 	int tick();
 
+	void move_camera(const glm::vec3&, const float&);
+	void update_perspective(const int width, const int height);
 	void add_body(Body3Ptr);
 
 private:
