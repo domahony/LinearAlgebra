@@ -30,6 +30,18 @@ move_camera(const glm::vec3& v, const float& d)
 }
 
 void WorldImpl::
+camera_in()
+{
+	camera.in();
+}
+
+void WorldImpl::
+camera_out()
+{
+	camera.out();
+}
+
+void WorldImpl::
 update_perspective(const int width, const int height)
 {
 	camera.update_perspective(width, height);
@@ -42,6 +54,18 @@ render()
 	for (std::vector<Body3Ptr>::const_iterator iter = bodies.begin(); iter != bodies.end(); iter++) {
 		(*iter)->render(camera, light);
 	}
+}
+
+glm::mat4 WorldImpl::
+get_projection() const
+{
+	return camera.projection();
+}
+
+glm::mat4 WorldImpl::
+get_view() const
+{
+	return camera.view();
 }
 
 void WorldImpl::

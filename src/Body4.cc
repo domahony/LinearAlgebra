@@ -7,7 +7,9 @@
 
 #include "Body4.h"
 #include "Die3.h"
+#include "Circle.h"
 #include "OpenGLState.h"
+#include "Crosshair.h"
 #include "Camera.h"
 #include "Light.h"
 #include <vector>
@@ -56,3 +58,4 @@ Body4<Creator, Renderer>::
 
 } /* namespace domahony */
 template class domahony::Body4<domahony::Die3, domahony::OpenGLState>;
+template class domahony::Body4<domahony::Circle, domahony::Crosshair>;

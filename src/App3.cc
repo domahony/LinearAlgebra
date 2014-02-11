@@ -8,6 +8,7 @@
 #include "App3.h"
 #include <SDL.h>
 #include "OpenGL.h"
+#include <cmath>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,6 +21,7 @@ extern "C" {
 namespace domahony {
 namespace applications {
 
+static glm::vec3 get_click_point(Sint32 m_x, Sint32 m_y, int d_x, int d_y, const glm::mat4& proj, const glm::mat4& view);
 
 App3::App3(const int& width, const int& height, domahony::World& world)
 : App(), display(width, height), world(world), middle_active(false)
@@ -73,6 +75,12 @@ button(const SDL_MouseButtonEvent& b)
 		middle_active = (b.state == SDL_PRESSED);
 		return true;
 
+	} else if (b.button == SDL_BUTTON_LEFT && b.state == SDL_PRESSED) {
+		std::cout << "Click: " << b.x << "," << b.y << std::endl;
+		glm::vec3 click = get_click_point(b.x, b.y,
+				display.get_width(), display.get_height(),
+				world.get_projection(), world.get_view());
+		std::cout << "Click: " << click.x << "," << click.y << "," << click.z << std::endl;
 	}
 
 	return false;
@@ -89,6 +97,25 @@ motion(const SDL_MouseMotionEvent& m)
 		//get some kind of translation quaternion and apply that to the current camera position
 		//camera.move(glm::vec3(m.yrel, m.xrel, 0));
 
+		glm::vec3 click_start = get_click_point(m.x + m.xrel, m.y + m.yrel,
+				display.get_width(), display.get_height(),
+				world.get_projection(), world.get_view());
+
+		glm::vec3 click_end = get_click_point(m.x, m.y,
+				display.get_width(), display.get_height(),
+				world.get_projection(), world.get_view());
+
+		glm::vec4 origin = world.get_view() * glm::vec4(0,0,0,1); origin/=origin.w;
+
+		double a = glm::distance(click_start, glm::vec3(origin));
+		double b = glm::distance(click_end, glm::vec3(origin));
+		double c = glm::distance(click_start, click_end);
+		double radius = glm::distance(glm::vec3(0), glm::vec3(origin));
+
+		 double gamma = std::acos(((a*a) + (b*b) - (c*c)) / (2 * a * b));
+
+		std::cout << a << ", " << b << ", " << c << ", "<< gamma * radius  * 180 / M_PI << std::endl;
+
 		int width = display.get_width();
 		int height = display.get_height();
 
@@ -98,7 +125,7 @@ motion(const SDL_MouseMotionEvent& m)
 		float dist = 1.f + (170.f * (actual_dist / max_dist));
 		std::cout << "Dist: " << dist << std::endl;
 
-		world.move_camera(glm::vec3(-m.xrel, -m.yrel, 0), dist);
+		world.move_camera(glm::vec3(-m.xrel, -m.yrel, 0), gamma * radius * 180.0 / M_PI);
 		return true;
 	}
 
@@ -108,8 +135,13 @@ motion(const SDL_MouseMotionEvent& m)
 bool App3::
 wheel(const SDL_MouseWheelEvent& e)
 {
+	if (e.y < 0) {
+		world.camera_out();
+	} else {
+		world.camera_in();
+	}
 
-	return false;
+	return true;
 }
 
 bool App3::
@@ -137,6 +169,110 @@ _tick()
 
 App3::~App3() {
 	// TODO Auto-generated destructor stub
+}
+
+static glm::vec3 get_click_point(Sint32 m_x, Sint32 m_y, int d_x, int d_y, const glm::mat4& proj, const glm::mat4& view)
+{
+	int mouse_y = d_y - m_y;
+	//int mouse_y = m_y;
+
+	// The ray Start and End positions, in Normalized Device Coordinates (Have you read Tutorial 4 ?)
+	glm::vec4 near_plane(
+	    ((static_cast<GLfloat>(m_x)/static_cast<GLfloat>(d_x))  - 0.5f) * 2.0f, // [0,1024] -> [-1,1]
+	    ((static_cast<GLfloat>(mouse_y)/static_cast<GLfloat>(d_y)) - 0.5f) * 2.0f, // [0, 768] -> [-1,1]
+	    1.0f, // The near plane maps to Z=-1 in Normalized Device Coordinates
+	    1.0f
+	);
+
+	glm::vec4 far_plane(
+	    ((static_cast<GLfloat>(m_x)/static_cast<GLfloat>(d_x))  - 0.5f) * 2.0f,
+	    ((static_cast<GLfloat>(mouse_y)/static_cast<GLfloat>(d_y)) - 0.5f) * 2.0f,
+	    0.0f,
+	    1.0f
+	);
+
+	/*
+	std::cout
+			<< "(" << lRayStart_NDC.x << ", "
+			<< lRayStart_NDC.y << ", "
+			<< lRayStart_NDC.z << ") -> "
+			<< "(" << lRayEnd_NDC.x << ", "
+			<< lRayEnd_NDC.y << ", "
+			<< lRayEnd_NDC.z << ")"
+			<< std::endl;
+	*/
+
+	// The Projection matrix goes from Camera Space to NDC.
+	// So inverse(ProjectionMatrix) goes from NDC to Camera Space.
+	glm::mat4 InverseProjectionMatrix = glm::inverse(proj);
+
+	// The View Matrix goes from World Space to Camera Space.
+	// So inverse(ViewMatrix) goes from Camera Space to World Space.
+	glm::mat4 InverseViewMatrix = glm::inverse(view);
+
+	glm::vec4 near_plane_camera = InverseProjectionMatrix * near_plane;    near_plane_camera/= near_plane_camera.w;
+	glm::vec4 near_plane_world  = InverseViewMatrix       * near_plane_camera; near_plane_world /=near_plane_world.w;
+
+	std::cout
+			<< "Screen Click: " << m_x << ", " << m_y << ", "
+			<< "Window Size: " << d_x << ", " << d_y << ", "
+			<< std::endl;
+	std::cout
+			<< "NDC: (" << near_plane.x << ", "
+			<< near_plane.y << ", "
+			<< near_plane.z << ")" << std::endl;
+	std::cout
+			<< "CAMERA: (" << near_plane_camera.x << ", "
+			<< near_plane_camera.y << ", "
+			<< near_plane_camera.z << ")" << std::endl;
+	std::cout
+			<< "WORLD (" << near_plane_world.x << ", "
+			<< near_plane_world.y << ", "
+			<< near_plane_world.z << ")" << std::endl;
+
+	return glm::vec3(near_plane_world);
+
+	glm::vec4 origin = view * glm::vec4(0,0,0,1); origin/=origin.w;
+
+	std::cout
+			<< "(" << near_plane_camera.x << ", "
+			<< near_plane_camera.y << ", "
+			<< near_plane_camera.z << ")" << std::endl;
+
+	std::cout
+			<< "(" << origin.x << ", "
+			<< origin.y << ", "
+			<< origin.z << ")" << std::endl;
+
+	glm::vec4 far_plane_camera   = InverseProjectionMatrix * far_plane;      far_plane_camera  /=far_plane_camera.w;
+	glm::vec4 far_plane_world    = InverseViewMatrix       * far_plane_camera;   far_plane_world   /=far_plane_world.w;
+
+	// Faster way (just one inverse)
+	//glm::mat4 M = glm::inverse(ProjectionMatrix * ViewMatrix);
+	//glm::vec4 lRayStart_world = M * lRayStart_NDC; lRayStart_world/=lRayStart_world.w;
+	//glm::vec4 lRayEnd_world   = M * lRayEnd_NDC  ; lRayEnd_world  /=lRayEnd_world.w;
+
+	/*
+	std::cout
+			<< "(" << lRayStart_world.x << ", "
+			<< lRayStart_world.y << ", "
+			<< lRayStart_world.z << ") -> "
+			<< "(" << lRayEnd_world.x << ", "
+			<< lRayEnd_world.y << ", "
+			<< lRayEnd_world.z << ")"
+			<< std::endl;
+	*/
+
+	glm::vec3 lRayDir_world(far_plane_world - near_plane_world);
+	lRayDir_world = glm::normalize(lRayDir_world);
+
+	/*
+	std::cout
+			<< "Dir: (" << lRayDir_world.x << ", "
+			<< lRayDir_world.y << ", "
+			<< lRayDir_world.z << ")"
+			<< std::endl;
+	*/
 }
 
 } /* namespace applications */

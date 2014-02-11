@@ -23,6 +23,18 @@ move_camera(const glm::vec3& v, const float& d)
 }
 
 void World::
+camera_out()
+{
+	impl->camera_out();
+}
+
+void World::
+camera_in()
+{
+	impl->camera_in();
+}
+
+void World::
 update_perspective(const int width, const int height)
 {
 	impl->update_perspective(width, height);
@@ -44,6 +56,16 @@ void World::
 add_body(Body3Ptr b)
 {
 	impl->add_body(b);
+}
+
+glm::mat4 World::
+get_projection() const {
+	return impl->get_projection();
+}
+
+glm::mat4 World::
+get_view() const {
+	return impl->get_view();
 }
 
 World::~World() {

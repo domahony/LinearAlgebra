@@ -20,9 +20,13 @@ public:
 
 	void update_perspective(const int width, const int height);
 	void move_camera(const glm::vec3&, const float&);
+	void camera_in();
+	void camera_out();
 	void render();
 	int tick();
 
+	glm::mat4 get_projection() const;
+	glm::mat4 get_view() const;
 
 	void add_body(Body3Ptr);
 

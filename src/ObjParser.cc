@@ -204,11 +204,43 @@ handle_face(std::vector<Face>& faces, const std::string& material, istringstream
 }
 
 static void
+handle_line(std::vector<Face>& faces, const std::string& material, istringstream& iss)
+{
+	std::string buf1, buf2;
+	Face face;
+	face.m = material;
+
+	iss >>
+		std::skipws >> buf1 >>
+		std::skipws >> buf2;
+
+	ivec3 ibuf1 = handle_face_buf(buf1);
+	ivec3 ibuf2 = handle_face_buf(buf2);
+
+	face.v.push_back(ibuf1);
+	face.v.push_back(ibuf2);
+
+	faces.push_back(face);
+
+	if (!iss.eof()) {
+		face = Face();
+		face.m = material;
+		iss >> std::skipws >> buf1;
+		ibuf1 = handle_face_buf(buf1);
+
+		face.v.push_back(ibuf2);
+		face.v.push_back(ibuf1);
+	}
+
+}
+
+static void
 data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 {
 	std::vector<glm::vec4> verts;
 	std::vector<glm::vec4> normals;
 	std::vector<Face> faces;
+	std::vector<Face> lines;
 
 	std::map<std::string, Material> material = get_material(mtl);
 
@@ -270,6 +302,8 @@ data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 
 		} else if (!c.compare("f")) {
 			handle_face(faces, mat, iss2);
+		} else if (!c.compare("l"))	 {
+			handle_line(lines, mat, iss2);
 		} else if (!c.compare("usemtl")) {
 			iss2 >> std::skipws >> mat;
 			std::cout << "MATERIAL: " << mat << std::endl;
@@ -312,6 +346,15 @@ data(const char* data, const char* mtl, std::vector<GLfloat>& ret)
 				ret.push_back(material[iter->m].Kd.g);
 				ret.push_back(material[iter->m].Kd.b);
 
+			}
+		}
+
+		for (std::vector<Face>::iterator iter = lines.begin(); iter != lines.end(); iter++) {
+
+			for (std::vector<ivec3>::iterator iter2 = iter->v.begin(); iter2 != iter->v.end(); iter2++) {
+				ret.push_back(verts[(*iter2)[0] - 1].x);
+				ret.push_back(verts[(*iter2)[0] - 1].y);
+				ret.push_back(verts[(*iter2)[0] - 1].z);
 			}
 		}
 }

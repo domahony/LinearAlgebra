@@ -24,8 +24,13 @@ public:
 	int tick();
 
 	void move_camera(const glm::vec3&, const float&);
+	void camera_in();
+	void camera_out();
 	void update_perspective(const int width, const int height);
 	void add_body(Body3Ptr);
+	glm::mat4 get_projection() const;
+	glm::mat4 get_view() const;
+
 
 private:
 	boost::shared_ptr<WorldImpl> impl;
