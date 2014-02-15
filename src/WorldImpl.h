@@ -20,6 +20,7 @@ public:
 
 	void update_perspective(const int width, const int height);
 	void move_camera(const glm::vec3&, const float&);
+	void move_sight(const glm::vec2&);
 	void camera_in();
 	void camera_out();
 	void render();

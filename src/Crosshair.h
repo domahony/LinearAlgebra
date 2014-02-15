@@ -43,8 +43,12 @@ public:
 		program.set_normal_matrix(m);
 	}
 
+	void set_projection_matrix(const glm::mat4& m) {
+		program.set_projection_matrix(m);
+	}
+
 	void set_view_matrix(const glm::mat3& m) {
-		program.set_view_matrix(m);
+		program.set_view_matrix(glm::inverse(m));
 	}
 
 	void set_light_direction(const glm::vec3& d) {

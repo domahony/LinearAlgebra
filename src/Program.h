@@ -42,6 +42,10 @@ public:
 		glUniformMatrix3fv(uniform.at(VIEW), 1, GL_FALSE, glm::value_ptr(m));
 	}
 
+	void set_projection_matrix(const glm::mat4& m) const {
+		glUniformMatrix4fv(uniform.at(PROJECTION), 1, GL_FALSE, glm::value_ptr(m));
+	}
+
 	void set_normal_matrix(const glm::mat3& m) const {
 		glUniformMatrix3fv(uniform.at(N_MATRIX), 1, GL_FALSE, glm::value_ptr(m));
 	}
@@ -67,6 +71,7 @@ public:
 private:
 	static const std::string MVP;
 	static const std::string VIEW;
+	static const std::string PROJECTION;
 	static const std::string EYE;
 	static const std::string N_MATRIX;
 

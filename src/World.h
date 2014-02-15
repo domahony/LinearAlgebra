@@ -24,9 +24,18 @@ public:
 	int tick();
 
 	void move_camera(const glm::vec3&, const float&);
+	void move_sight(const glm::vec2&);
+
 	void camera_in();
 	void camera_out();
+	glm::mat4 camera_location() const;
+	glm::vec3 light_direction() const;
+	glm::vec3 light_color() const;
+	float global_light() const;
+
+
 	void update_perspective(const int width, const int height);
+
 	void add_body(Body3Ptr);
 	glm::mat4 get_projection() const;
 	glm::mat4 get_view() const;

@@ -33,6 +33,8 @@ public:
 	 * Updates the projection matrix based on changing the width and hieight of the view
 	 */
 	void update_perspective(const int& w, const int& h) {
+		width = w;
+		height = h;
 		m_projection = glm::perspective(45.f, w/static_cast<float>(h), 0.01f, 200.0f);
 	}
 
@@ -173,6 +175,14 @@ public:
 
 	void move(const glm::vec3& v, const float& deg);
 
+	const int get_width() const {
+		return width;
+	}
+
+	const int get_height() const {
+		return height;
+	}
+
 private:
 
 	void move2(const glm::vec3& v, const float& m) {
@@ -196,6 +206,8 @@ private:
 	glm::vec3 m_location;
 	glm::quat m_quaternion;
 	glm::quat m_camera_quat;
+	int width;
+	int height;
 
 };
 

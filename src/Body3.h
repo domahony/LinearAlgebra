@@ -21,7 +21,7 @@ public:
 	Body3(const glm::mat4& l): location(l), material(glm::vec3(.6), 1.f) {};
 
 	virtual ~Body3() {};
-	virtual void render(const domahony::framework::Camera& c, const domahony::framework::Light& l) const =0;
+	virtual void render(const domahony::framework::Camera& c, const domahony::framework::Light& l, const int, const int) const =0;
 
 	void set_location(const glm::mat4& loc) {
 		location = loc;
@@ -35,6 +35,11 @@ public:
 	domahony::framework::Material get_material() const
 	{
 		return material;
+	}
+
+	void move(const glm::vec3& v) {
+		glm::mat4 t = glm::translate(glm::mat4(1), v);
+		location = t * location;
 	}
 
 private:

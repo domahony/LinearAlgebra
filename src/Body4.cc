@@ -24,7 +24,7 @@ Body4(const glm::mat4& l) : Body3(l), creator(new Creator()), renderer(new Rende
 
 template<class Creator, class Renderer>
 void Body4<Creator, Renderer>::
-render(const domahony::framework::Camera& c, const domahony::framework::Light& l) const {
+render(const domahony::framework::Camera& c, const domahony::framework::Light& l, const int w, const int h) const {
 
 	renderer->enable();
 	renderer->set_eye_location(c.location());
@@ -32,6 +32,15 @@ render(const domahony::framework::Camera& c, const domahony::framework::Light& l
 	renderer->set_light_direction(l.get_direction());
 	renderer->set_light_color(l.get_color());
 	renderer->set_global_light(l.get_global());
+
+	glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(
+					h/static_cast<float>(w * 4),
+					1/static_cast<float>(4),
+					1/static_cast<float>(4)));
+
+	glm::mat4 translate = glm::translate(glm::mat4(1), glm::vec3(0.5, 0, 0));
+
+	renderer->set_projection_matrix(scale * get_location());
 
 	renderer->set_mvp_matrix(c.projection()
 	* c.view()

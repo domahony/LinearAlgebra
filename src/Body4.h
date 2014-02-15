@@ -9,8 +9,7 @@
 #define BODY4_H_
 
 #include "Body3.h"
-#include "Camera.h"
-#include "Light.h"
+#include "World.h"
 
 namespace domahony {
 
@@ -18,7 +17,7 @@ template<class Creator, class Renderer>
 class Body4 : public Body3 {
 public:
 	Body4(const glm::mat4& location);
-	void render(const domahony::framework::Camera& c, const domahony::framework::Light& l) const;
+	void render(const domahony::framework::Camera& c, const domahony::framework::Light& l, const int w, const int h) const;
 
 	virtual ~Body4();
 private:

@@ -147,7 +147,29 @@ wheel(const SDL_MouseWheelEvent& e)
 bool App3::
 key(const SDL_KeyboardEvent& e)
 {
-	return false;
+	bool ret = false;
+	switch (e.keysym.sym) {
+	case SDLK_LEFT:
+		world.move_sight(glm::vec2(-0.1, 0));
+		ret = true;
+	break;
+	case SDLK_RIGHT:
+		world.move_sight(glm::vec2(0.1, 0));
+		ret = true;
+	break;
+	case SDLK_UP:
+		world.move_sight(glm::vec2(0, 0.1));
+		ret = true;
+	break;
+	case SDLK_DOWN:
+		world.move_sight(glm::vec2(0, -0.1));
+		ret = true;
+	break;
+	default:
+	break;
+	}
+
+	return ret;
 }
 
 int App3::

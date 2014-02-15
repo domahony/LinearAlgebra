@@ -30,6 +30,12 @@ move_camera(const glm::vec3& v, const float& d)
 }
 
 void WorldImpl::
+move_sight(const glm::vec2& v)
+{
+	bodies[bodies.size() - 1]->move(glm::vec3(v.x, v.y, 0));
+}
+
+void WorldImpl::
 camera_in()
 {
 	camera.in();
@@ -52,7 +58,7 @@ render()
 {
 	cout << "Render" << endl;
 	for (std::vector<Body3Ptr>::const_iterator iter = bodies.begin(); iter != bodies.end(); iter++) {
-		(*iter)->render(camera, light);
+		(*iter)->render(camera, light, camera.get_width(), camera.get_height());
 	}
 }
 

@@ -40,6 +40,10 @@ public:
 		program.set_mvp_matrix(m);
 	}
 
+	void set_projection_matrix(const glm::mat4& m) {
+		//program.set_mvp_matrix(m);
+	}
+
 	void set_normal_matrix(const glm::mat3& m) {
 		program.set_normal_matrix(m);
 	}
