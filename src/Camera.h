@@ -67,6 +67,9 @@ public:
 		return m_location;
 	}
 
+	const glm::vec3 get_looking_at() const {
+		return looking_at;
+	}
 
 	/**
 	 * Move the laterally left
@@ -183,6 +186,20 @@ public:
 		return height;
 	}
 
+	void lookAt(const glm::vec3& l) {
+		std::cout << "Looking at: " <<
+				looking_at.x << "," <<
+				looking_at.y << "," <<
+				looking_at.z << ")" << std::endl;
+		looking_at = l;
+		std::cout << "Looking at: " <<
+				looking_at.x << "," <<
+				looking_at.y << "," <<
+				looking_at.z << ")" << std::endl;
+
+		m_camera_quat = glm::normalize(glm::quat_cast(glm::lookAt(m_location, looking_at, glm::vec3(0,1,0))));
+	}
+
 private:
 
 	void move2(const glm::vec3& v, const float& m) {
@@ -202,6 +219,7 @@ private:
 		return local;
 	}
 
+	glm::vec3 looking_at;
 	glm::mat4 m_projection;
 	glm::vec3 m_location;
 	glm::quat m_quaternion;

@@ -12,10 +12,12 @@ namespace domahony {
 namespace framework {
 
 Camera::Camera() :
+		looking_at(glm::vec3(0)),
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 10000.0f)),
 		m_location(glm::vec3(0,2,14)),
-		m_quaternion(glm::normalize(glm::quat_cast(glm::lookAt(m_location, glm::vec3(0,0,0), glm::vec3(0,1,0))))),
+		m_quaternion(glm::normalize(glm::quat_cast(glm::lookAt(m_location, looking_at, glm::vec3(0,1,0))))),
 		m_camera_quat(1, 0, 0, 0),
+		//m_camera_quat(m_quaternion),
 		width(640), height(480)
 	{
 		glm::vec3 q_axis = glm::axis(m_quaternion);
@@ -70,6 +72,7 @@ move(const glm::vec3& v, const float& deg) {
 		v2.x *= -1.f;
 
 		m_quaternion = m_quaternion * spin(glm::normalize(v2), deg);
+		//m_camera_quat = m_camera_quat * spin(glm::normalize(v2), deg);
 		return;
 
 		/*

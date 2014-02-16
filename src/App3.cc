@@ -151,18 +151,22 @@ key(const SDL_KeyboardEvent& e)
 	switch (e.keysym.sym) {
 	case SDLK_LEFT:
 		world.move_sight(glm::vec2(-0.1, 0));
+		world.look();
 		ret = true;
 	break;
 	case SDLK_RIGHT:
 		world.move_sight(glm::vec2(0.1, 0));
+		world.look();
 		ret = true;
 	break;
 	case SDLK_UP:
 		world.move_sight(glm::vec2(0, 0.1));
+		world.look();
 		ret = true;
 	break;
 	case SDLK_DOWN:
 		world.move_sight(glm::vec2(0, -0.1));
+		world.look();
 		ret = true;
 	break;
 	default:

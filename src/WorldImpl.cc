@@ -36,6 +36,18 @@ move_sight(const glm::vec2& v)
 }
 
 void WorldImpl::
+look()
+{
+	glm::mat4 m = bodies[bodies.size() - 1]->get_location();
+	glm::vec4 v(1);
+	v.z = 0;
+
+	glm::vec3 loc = glm::vec3(m * v);
+
+	camera.lookAt(loc);
+}
+
+void WorldImpl::
 camera_in()
 {
 	camera.in();

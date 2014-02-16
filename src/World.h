@@ -25,6 +25,7 @@ public:
 
 	void move_camera(const glm::vec3&, const float&);
 	void move_sight(const glm::vec2&);
+	void look();
 
 	void camera_in();
 	void camera_out();

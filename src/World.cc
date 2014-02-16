@@ -23,6 +23,12 @@ move_sight(const glm::vec2& v)
 }
 
 void World::
+look()
+{
+	impl->look();
+}
+
+void World::
 move_camera(const glm::vec3& v, const float& d)
 {
 	impl->move_camera(v, d);
