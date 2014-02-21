@@ -169,6 +169,10 @@ key(const SDL_KeyboardEvent& e)
 		world.look();
 		ret = true;
 	break;
+	case SDLK_r:
+		world.reset();
+		ret = true;
+	break;
 	default:
 	break;
 	}

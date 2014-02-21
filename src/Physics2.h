@@ -14,13 +14,12 @@
 #include <btBulletDynamicsCommon.h>
 #include <ctime>
 #include <vector>
-#include "Body.h"
-#include "AppObject.h"
+#include <glm/glm.hpp>
 
 namespace domahony {
 namespace physics {
 
-class Physics {
+class Physics2 {
 
 public:
 
@@ -33,38 +32,40 @@ public:
 		std::vector<ContactInfoItem> items;
 	};
 
-	Physics();
-
-	void * get_click_object(const glm::vec4& start, const glm::vec3& direction) const;
+	Physics2();
 
 	int tick() {
 		clock_t cur_tick = clock();
 
 		btScalar delta = static_cast<btScalar>((cur_tick - last_tick)) / CLOCKS_PER_SEC;
-		//std::cout << "Physics Step: " << delta << std::endl;
+		std::cout << "Physics Step: " << delta << std::endl;
 
 		last_tick = cur_tick;
 
 		btCollisionObjectArray a =  dynamicsWorld->getCollisionObjectArray();
+		dynamicsWorld->synchronizeMotionStates();
 
 		return dynamicsWorld->stepSimulation(delta, 7);
 	}
 
+	void * get_click_object(const glm::vec4& start, const glm::vec3& dir) const;
+
 	bool any_touches();
 
-	void add_body(Body& body) {
-		dynamicsWorld->addRigidBody(body.getRigidBody());
+	void add_body(btRigidBody* body) {
+		dynamicsWorld->addRigidBody(body);
 	}
 
 	int internal_tick(btScalar step) {
-			//std::cout << "Internal Step: " << step << std::endl;
+			std::cout << "Internal Step: " << step << std::endl;
 			return 1;
 	}
 
-	void get_contact_info(ContactInfo& ci, domahony::applications::AppObject*, const glm::vec3&, const float&) const;
+	void sync() {
+		//dynamicsWorld->synchronizeMotionStates();
+	}
 
-
-	virtual ~Physics();
+	virtual ~Physics2();
 
 private:
 	boost::shared_ptr<btBroadphaseInterface> broadphase;

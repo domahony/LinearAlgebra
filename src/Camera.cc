@@ -16,7 +16,8 @@ Camera::Camera() :
 		m_projection(glm::perspective(45.0f, 4.0f/3.0f, 0.1f, 10000.0f)),
 		m_location(glm::vec3(0,2,14)),
 		m_quaternion(glm::normalize(glm::quat_cast(glm::lookAt(m_location, looking_at, glm::vec3(0,1,0))))),
-		m_camera_quat(1, 0, 0, 0),
+		//m_camera_quat(1, 0, 0, 0),
+		m_camera_quat(glm::quat_cast(glm::mat4(1))),
 		//m_camera_quat(m_quaternion),
 		width(640), height(480)
 	{

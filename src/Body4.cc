@@ -10,6 +10,7 @@
 #include "Circle.h"
 #include "OpenGLState.h"
 #include "Crosshair.h"
+#include "GroundPlane.h"
 #include "Camera.h"
 #include "Light.h"
 #include <vector>
@@ -18,7 +19,7 @@ namespace domahony {
 
 template<class Creator, class Renderer>
 Body4<Creator, Renderer>::
-Body4(const glm::mat4& l) : Body3(l), creator(new Creator()), renderer(new Renderer()) {
+Body4(boost::shared_ptr<Creator> c, const glm::mat4& l) : Body3(l, c->get_mass(), c->get_collision_shape()), creator(c), renderer(new Renderer()) {
 	renderer->set_data(creator->get_data());
 }
 
@@ -68,3 +69,4 @@ Body4<Creator, Renderer>::
 } /* namespace domahony */
 template class domahony::Body4<domahony::Die3, domahony::OpenGLState>;
 template class domahony::Body4<domahony::Circle, domahony::Crosshair>;
+template class domahony::Body4<domahony::GroundPlane, domahony::GroundPlane>;

@@ -9,6 +9,7 @@
 #define DIE3_H_
 
 #include <vector>
+#include <btBulletCollisionCommon.h>
 
 namespace domahony {
 
@@ -17,6 +18,14 @@ public:
 	Die3();
 	std::vector<float>& get_data() {
 		return data;
+	}
+
+	float get_mass() const {
+		return 10;
+	}
+
+	btCollisionShape * get_collision_shape() const {
+		return new btBoxShape(btVector3(1,1,1));
 	}
 
 	virtual ~Die3();

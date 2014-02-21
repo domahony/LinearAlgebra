@@ -9,6 +9,7 @@
 #define WORLDIMPL_H_
 
 #include "Body3.h"
+#include "Physics2.h"
 #include <vector>
 
 namespace domahony {
@@ -26,6 +27,7 @@ public:
 	void camera_out();
 	void render();
 	int tick();
+	void reset();
 
 	glm::mat4 get_projection() const;
 	glm::mat4 get_view() const;
@@ -36,6 +38,7 @@ private:
 	std::vector<Body3Ptr> bodies;
 	domahony::framework::Camera camera;
 	domahony::framework::Light light;
+	domahony::physics::Physics2 physics;
 };
 
 } /* namespace domahony */

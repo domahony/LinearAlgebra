@@ -128,15 +128,16 @@ start()
 				break;
 			}
 
-			if (doDisplay) {
-				std::cout << "Do Display: " << doDisplay << std::endl;
-			}
-
-			if (tick() || doDisplay) {
-				_display();
-			}
+			//if (doDisplay) {
+			//	std::cout << "Do Display: " << doDisplay << std::endl;
+			//}
 
 		}
+
+		if (tick() || doDisplay) {
+			_display();
+		}
+
 	}
 
 	SDL_Quit();

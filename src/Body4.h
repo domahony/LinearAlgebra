@@ -16,7 +16,7 @@ namespace domahony {
 template<class Creator, class Renderer>
 class Body4 : public Body3 {
 public:
-	Body4(const glm::mat4& location);
+	Body4(boost::shared_ptr<Creator>, const glm::mat4& location);
 	void render(const domahony::framework::Camera& c, const domahony::framework::Light& l, const int w, const int h) const;
 
 	virtual ~Body4();

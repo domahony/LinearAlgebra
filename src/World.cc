@@ -65,6 +65,12 @@ tick()
 }
 
 void World::
+reset()
+{
+	impl->reset();
+}
+
+void World::
 add_body(Body3Ptr b)
 {
 	impl->add_body(b);

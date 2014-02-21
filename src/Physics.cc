@@ -274,6 +274,7 @@ Physics::Physics() :
 
 	dynamicsWorld->setInternalTickCallback(callback, static_cast<void *>(this), true);
 
+
 }
 
 Physics::~Physics() {

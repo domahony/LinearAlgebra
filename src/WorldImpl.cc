@@ -91,12 +91,28 @@ add_body(Body3Ptr body)
 {
 	cout << "Add Body" << endl;
 	bodies.push_back(body);
+	physics.add_body(body->get_rigid_body());
+}
+
+void WorldImpl::
+reset()
+{
+
+	for (std::vector<Body3Ptr>::iterator iter = bodies.begin(); iter != bodies.end(); iter++) {
+		(*iter)->reset();
+	}
+
+	physics.sync();
+
+	//for (std::vector<Body3Ptr>::iterator iter = bodies.begin(); iter != bodies.end(); iter++) {
+	//	(*iter)->activate();
+	//}
 }
 
 int WorldImpl::
 tick()
 {
-	return 0;
+	return physics.tick();
 }
 
 } /* namespace domahony */
