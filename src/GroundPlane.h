@@ -16,7 +16,7 @@ namespace domahony {
 
 class GroundPlane {
 public:
-	GroundPlane() : data(), cshape(new btStaticPlaneShape(btVector3(0,1,0),1)) {};
+	GroundPlane(glm::vec3 normal=glm::vec3(0,1,0), float constant=1) : data(), cshape(new btStaticPlaneShape(btVector3(normal.x,normal.y,normal.z),constant)) {};
 	virtual ~GroundPlane() {};
 
 	float get_mass() const {

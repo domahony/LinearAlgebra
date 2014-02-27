@@ -37,7 +37,6 @@ public:
 		location(l), material(glm::vec3(.6), 1.f),
 		rigid_body(new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(mass, this, cshape, get_inertia(mass, cshape))))
 	{
-
 	};
 
 	virtual ~Body3() {};

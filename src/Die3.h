@@ -21,7 +21,7 @@ public:
 	}
 
 	float get_mass() const {
-		return 10;
+		return 100;
 	}
 
 	btCollisionShape * get_collision_shape() const {
