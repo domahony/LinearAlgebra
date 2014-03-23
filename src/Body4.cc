@@ -9,10 +9,13 @@
 #include "Die3.h"
 #include "Circle.h"
 #include "OpenGLState.h"
+#include "OpenGLState2.h"
 #include "Crosshair.h"
 #include "GroundPlane.h"
+#include "Plane.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Light2.h"
 #include <vector>
 
 namespace domahony {
@@ -28,11 +31,14 @@ void Body4<Creator, Renderer>::
 render(const domahony::framework::Camera& c, const domahony::framework::Light& l, const int w, const int h) const {
 
 	renderer->enable();
-	renderer->set_eye_location(c.location());
+	//renderer->set_eye_location(c.location());
 
-	renderer->set_light_direction(l.get_direction());
-	renderer->set_light_color(l.get_color());
-	renderer->set_global_light(l.get_global());
+	domahony::Light2 light2(l.get_direction(), l.get_color(), l.get_color());
+	renderer->set_light(c.location(), light2);
+
+	//renderer->set_light_direction(l.get_direction());
+	//renderer->set_light_color(l.get_color());
+	//renderer->set_global_light(l.get_global());
 
 	glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(
 					h/static_cast<float>(w * 4),
@@ -41,20 +47,21 @@ render(const domahony::framework::Camera& c, const domahony::framework::Light& l
 
 	glm::mat4 translate = glm::translate(glm::mat4(1), glm::vec3(0.5, 0, 0));
 
-	renderer->set_projection_matrix(scale * get_location());
+	//renderer->set_projection_matrix(scale * get_location());
+	renderer->set_projection_matrix(c.projection());
 
-	renderer->set_mvp_matrix(c.projection()
-	* c.view()
+	renderer->set_modelview_matrix(
+	c.view()
 	* get_location()
 	* glm::scale(glm::mat4(1.f), glm::vec3(1.0))
 	);
 
-	renderer->set_view_matrix(glm::mat3(c.view()));
+	//renderer->set_view_matrix(glm::mat3(c.view()));
 
 	renderer->set_normal_matrix(glm::mat3(c.projection() * c.view() * get_location()));
 
-	renderer->set_specular_color(get_material().get_specular_color());
-	renderer->set_gloss(get_material().get_gloss());
+	//renderer->set_specular_color(get_material().get_specular_color());
+	//renderer->set_gloss(get_material().get_gloss());
 
 	renderer->render();
 	renderer->disable();
@@ -68,5 +75,7 @@ Body4<Creator, Renderer>::
 
 } /* namespace domahony */
 template class domahony::Body4<domahony::Die3, domahony::OpenGLState>;
-template class domahony::Body4<domahony::Circle, domahony::Crosshair>;
-template class domahony::Body4<domahony::GroundPlane, domahony::GroundPlane>;
+//template class domahony::Body4<domahony::Circle, domahony::Crosshair>;
+//template class domahony::Body4<domahony::Plane, domahony::Crosshair>;
+template class domahony::Body4<domahony::Plane, domahony::OpenGLState>;
+//template class domahony::Body4<domahony::Plane, domahony::OpenGLState2>;

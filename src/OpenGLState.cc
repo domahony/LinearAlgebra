@@ -13,8 +13,8 @@
 extern "C" {
 #endif
 
-extern char Basic_Frag[];
-extern char Basic_Vert[];
+extern char mat_Gloss_Red_Frag[];
+extern char mat_Gloss_Red_Vert[];
 
 #ifdef __cplusplus
 }
@@ -32,7 +32,7 @@ init_vao()
 }
 
 using domahony::opengl::Shader;
-using domahony::opengl::Program;
+using domahony::opengl::BlenderProgram;
 
 OpenGLState::
 OpenGLState() : vao(init_vao()), vbo(),
@@ -40,14 +40,19 @@ OpenGLState() : vao(init_vao()), vbo(),
 			gl_back_mode(GL_LINE)
 {
 
-	Shader vshader2(GL_VERTEX_SHADER, Basic_Vert);
+	Shader vshader2(GL_VERTEX_SHADER, mat_Gloss_Red_Vert);
 	program.attach_shader(vshader2);
 
-	Shader fshader2(GL_FRAGMENT_SHADER, Basic_Frag);
+	Shader fshader2(GL_FRAGMENT_SHADER, mat_Gloss_Red_Frag);
 	program.attach_shader(fshader2);
 
 	program.link();
 
+	for (int i = 0; i < 3; i++) {
+		program.set_light_position(i, glm::vec3(1,0,0));
+		program.set_light_diffuse(i, glm::vec3(1,1,1));
+		program.set_light_specular(i, glm::vec3(1,1,1));
+	}
 	//glUseProgram(program);
 
 }

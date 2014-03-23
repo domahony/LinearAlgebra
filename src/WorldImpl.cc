@@ -14,7 +14,7 @@ namespace domahony {
 using std::cout;
 using std::endl;
 
-WorldImpl::WorldImpl() : bodies(), camera(), light(glm::normalize(glm::vec3(-1,-1,0)), glm::vec3(1,1,1), 0.1) {
+WorldImpl::WorldImpl() : bodies(), camera(), light(glm::normalize(glm::vec3(1,1,0)), glm::vec3(1,1,1), 0.1) {
 	// TODO Auto-generated constructor stub
 
 }

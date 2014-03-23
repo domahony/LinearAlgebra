@@ -9,9 +9,10 @@
 #define OPENGLSTATE_H_
 
 #include <iostream>
-#include "Program.h"
+#include "BlenderProgram.h"
 #include <vector>
 #include "VBO.h"
+#include "Light2.h"
 
 namespace domahony {
 
@@ -28,44 +29,25 @@ public:
 		glUseProgram(0);
 	}
 
-	void set_eye_location(const glm::vec3& v) {
-		program.set_eye_location(v);
-	}
-
-	void set_global_light(const float& g) {
-		program.set_global_light(g);
-	}
-
-	void set_mvp_matrix(const glm::mat4& m) {
-		program.set_mvp_matrix(m);
+	void set_light(const glm::vec3& eye, const Light2& light) {
+		program.set_light_diffuse(0, light.get_diffuse());
+		program.set_light_specular(0, light.get_specular());
+		program.set_light_position(0, light.get_position());
+		glm::vec3 h = (eye + light.get_position()) / glm::length(eye + light.get_position());
+		program.set_light_half_vector(0, h);
 	}
 
 	void set_projection_matrix(const glm::mat4& m) {
 		//program.set_mvp_matrix(m);
+		program.set_projection_matrix(m);
+	}
+
+	void set_modelview_matrix(const glm::mat4& m)  {
+		program.set_modelview_matrix(m);
 	}
 
 	void set_normal_matrix(const glm::mat3& m) {
 		program.set_normal_matrix(m);
-	}
-
-	void set_view_matrix(const glm::mat3& m) {
-		program.set_view_matrix(m);
-	}
-
-	void set_light_direction(const glm::vec3& d) {
-		program.set_light_direction(d);
-	}
-
-	void set_light_color(const glm::vec3& c) {
-		program.set_light_color(c);
-	}
-
-	void set_specular_color(const glm::vec3& c) {
-		program.set_specular_color(c);
-	}
-
-	void set_gloss(const float& g) {
-		program.set_gloss(g);
 	}
 
 	void set_data(const std::vector<GLfloat>&);
@@ -74,7 +56,7 @@ public:
 
 private:
 	GLuint vao;
-	domahony::opengl::Program program;
+	domahony::opengl::BlenderProgram program;
 	domahony::opengl::VBO vbo;
 	GLenum gl_front_mode;
 	GLenum gl_back_mode;

@@ -5,8 +5,10 @@
 #include "Die3.h"
 #include "Circle.h"
 #include "OpenGLState.h"
+#include "OpenGLState2.h"
 #include "Crosshair.h"
 #include "GroundPlane.h"
+#include "Plane.h"
 #include "RandomDiceBody.h"
 
 int
@@ -23,22 +25,23 @@ main(int argc, char **argv)
 
 	boost::shared_ptr<domahony::Circle> c(new domahony::Circle());
 
-	boost::shared_ptr<domahony::Body4<domahony::Circle, domahony::Crosshair> > circle(
-			new domahony::Body4<domahony::Circle, domahony::Crosshair>(c, glm::translate(glm::mat4(1.), glm::vec3(0,0,0))));
+	//boost::shared_ptr<domahony::Body4<domahony::Circle, domahony::Crosshair> > circle(
+	//		new domahony::Body4<domahony::Circle, domahony::Crosshair>(c, glm::translate(glm::mat4(1.), glm::vec3(0,0,0))));
 
-	boost::shared_ptr<domahony::GroundPlane> gp(new domahony::GroundPlane());
-	boost::shared_ptr<domahony::GroundPlane> wall(new domahony::GroundPlane(glm::vec3(1,0,0), -2));
+	boost::shared_ptr<domahony::Plane> gp(new domahony::Plane());
+	boost::shared_ptr<domahony::Plane> wall(new domahony::Plane(glm::vec3(1,0,0), -2));
 
-	boost::shared_ptr<domahony::Body4<domahony::GroundPlane, domahony::GroundPlane> > groundplane(
-			new domahony::Body4<domahony::GroundPlane, domahony::GroundPlane>(gp, glm::translate(glm::mat4(1.), glm::vec3(0,0,0))));
-	boost::shared_ptr<domahony::Body4<domahony::GroundPlane, domahony::GroundPlane> > wall_body(
-			new domahony::Body4<domahony::GroundPlane, domahony::GroundPlane>(wall, glm::translate(glm::mat4(1.), glm::vec3(0,0,0))));
+	boost::shared_ptr<domahony::Body4<domahony::Plane, domahony::OpenGLState> > groundplane(
+			new domahony::Body4<domahony::Plane, domahony::OpenGLState>(gp, glm::translate(glm::mat4(1.), glm::vec3(0,0,0))));
+	boost::shared_ptr<domahony::Body4<domahony::Plane, domahony::OpenGLState> > wall_body(
+			new domahony::Body4<domahony::Plane, domahony::OpenGLState>(wall, glm::rotate(glm::mat4(1.), 90.f, glm::vec3(1.f,0,0))));
 
 	w.add_body(r);
 	w.add_body(r2);
 	w.add_body(r3);
-	//w.add_body(bp4);
+	//w.add_body(circle);
 	w.add_body(groundplane);
+	//w.add_body(bp4);
 	w.add_body(wall_body);
 
 	t.start();
